@@ -17,6 +17,9 @@ Now with bulk editing, thanks to Matthew Gerring!
 
 ## Changelog
 
+### Version 1.4
+* Improve handling of non-public post types
+
 ### Version 1.3
 * Fix saving of autodrafts
 
