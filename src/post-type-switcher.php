@@ -13,13 +13,13 @@
  * Plugin Name: Post Type Switcher
  * Plugin URI:  http://wordpress.org/extend/post-type-switcher/
  * Description: Allow switching of a post type while editing a post (in post publish section)
- * Version:     1.3
+ * Version:     1.4
  * Author:      johnjamesjacoby
  * Author URI:  http://johnjamesjacoby.com
  */
 
 // Exit if accessed directly
-if ( !defined( 'ABSPATH' ) ) exit;
+defined( 'ABSPATH' ) || exit;
 
 /**
  * The main post type switcher class
@@ -71,8 +71,15 @@ final class Post_Type_Switcher {
 		$cpt_object = get_post_type_object( get_post_type() );
 
 		// Bail if object does not exist or produces an error
-		if ( empty( $cpt_object ) || is_wp_error( $cpt_object ) )
-			return; ?>
+		if ( empty( $cpt_object ) || is_wp_error( $cpt_object ) ) {
+			return;
+		}
+
+		// Force-add current post type if it's not in the list
+		// https://wordpress.org/support/topic/dont-show-for-non-public-post-types?replies=4#post-5849287
+		if ( ! in_array( $cpt_object, $post_types ) ) {
+			$post_types[ get_post_type() ] = $cpt_object;
+		} ?>
 
 		<div class="misc-pub-section misc-pub-section-last post-type-switcher">
 			<label for="pts_post_type"><?php _e( 'Post Type:' ); ?></label>
@@ -89,7 +96,9 @@ final class Post_Type_Switcher {
 
 						<?php foreach ( $post_types as $post_type => $pt ) : ?>
 
-							<?php if ( ! current_user_can( $pt->cap->publish_posts ) ) continue; ?>
+							<?php if ( ! current_user_can( $pt->cap->publish_posts ) ) :
+								continue;
+							endif; ?>
 
 							<option value="<?php echo esc_attr( $pt->name ); ?>" <?php selected( get_post_type(), $post_type ); ?>><?php echo esc_html( $pt->labels->singular_name ); ?></option>
 
@@ -158,8 +167,9 @@ final class Post_Type_Switcher {
 	 * @since PostTypeSwitcher (1.2)
 	 */
 	public function quickedit_script( $hook = '' ) {
-		if ( 'edit.php' != $hook )
+		if ( 'edit.php' !== $hook ) {
 			return;
+		}
 
 		wp_enqueue_script( 'pts_quickedit', plugins_url( 'js/quickedit.js', __FILE__ ), array( 'jquery' ), '', true );
 	}
@@ -180,7 +190,9 @@ final class Post_Type_Switcher {
 
 			<?php foreach ( $post_types as $post_type => $pt ) : ?>
 
-				<?php if ( ! current_user_can( $pt->cap->publish_posts ) ) continue; ?>
+				<?php if ( ! current_user_can( $pt->cap->publish_posts ) ) :
+					continue; 
+				endif; ?>
 
 				<option value="<?php echo esc_attr( $pt->name ); ?>" <?php selected( get_post_type(), $post_type ); ?>><?php echo esc_html( $pt->labels->singular_name ); ?></option>
 
@@ -236,7 +248,8 @@ final class Post_Type_Switcher {
 			return;
 		}
 
-		if ( ! $new_post_type_object = get_post_type_object( $_REQUEST['pts_post_type'] ) ) {
+		$new_post_type_object = get_post_type_object( $_REQUEST['pts_post_type'] );
+		if ( empty( $new_post_type_object ) ) {
 			return;
 		}
 
@@ -319,12 +332,15 @@ final class Post_Type_Switcher {
 		global $pagenow;
 
 		// Only for admin area
-		if ( ! is_admin() )
+		if ( ! is_admin() ) {
 			return false;
+		}
 
 		// Allowed admin pages
 		$pages = apply_filters( 'pts_allowed_pages', array(
-			'post.php', 'edit.php', 'admin-ajax.php'
+			'post.php',
+			'edit.php',
+			'admin-ajax.php'
 		) );
 
 		// Only show switcher when editing

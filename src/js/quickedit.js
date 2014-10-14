@@ -9,7 +9,7 @@ function pts_quick_edit() {
 
 		_edit.apply( this, args );
 
-		if ( typeof( id ) == 'object' ) {
+		if ( typeof( id ) === 'object' ) {
 			id = this.getId( id );
 		}
 
