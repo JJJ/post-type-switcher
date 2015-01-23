@@ -148,6 +148,9 @@ final class Post_Type_Switcher {
 	 * @since PostTypeSwitcher (1.2)
 	 */
 	public function quickedit( $column_name, $post_type ) {
+		if ( $column_name !== 'post_type' ) {
+			return;
+		}
 	?>
 		<fieldset class="inline-edit-col-right">
 			<div class="inline-edit-col">
@@ -191,7 +194,7 @@ final class Post_Type_Switcher {
 			<?php foreach ( $post_types as $post_type => $pt ) : ?>
 
 				<?php if ( ! current_user_can( $pt->cap->publish_posts ) ) :
-					continue; 
+					continue;
 				endif; ?>
 
 				<option value="<?php echo esc_attr( $pt->name ); ?>" <?php selected( get_post_type(), $post_type ); ?>><?php echo esc_html( $pt->labels->singular_name ); ?></option>
@@ -272,20 +275,20 @@ final class Post_Type_Switcher {
 		<script type="text/javascript">
 			jQuery( document ).ready( function( $ ) {
 				jQuery( '.misc-pub-section.curtime.misc-pub-section-last' ).removeClass( 'misc-pub-section-last' );
-				jQuery( '#edit-post-type-switcher' ).click( function(e) {
+				jQuery( '#edit-post-type-switcher' ).on( 'click', function(e) {
 					jQuery( this ).hide();
 					jQuery( '#post-type-select' ).slideDown();
 					e.preventDefault();
 				});
 
-				jQuery( '#save-post-type-switcher' ).click( function(e) {
+				jQuery( '#save-post-type-switcher' ).on( 'click', function(e) {
 					jQuery( '#post-type-select' ).slideUp();
 					jQuery( '#edit-post-type-switcher' ).show();
 					jQuery( '#post-type-display' ).text( jQuery( '#pts_post_type :selected' ).text() );
 					e.preventDefault();
 				});
 
-				jQuery( '#cancel-post-type-switcher' ).click( function(e) {
+				jQuery( '#cancel-post-type-switcher' ).on( 'click', function(e) {
 					jQuery( '#post-type-select' ).slideUp();
 					jQuery( '#edit-post-type-switcher' ).show();
 					e.preventDefault();
@@ -298,10 +301,17 @@ final class Post_Type_Switcher {
 				margin-top: 3px;
 				display: none;
 			}
+			#post-type-select select#pts_post_type {
+				margin-right: 2px;
+			}
+			#post-type-select a#save-post-type-switcher {
+				vertical-align: middle;
+				margin-right: 2px;
+			}
 			#post-type-display {
 				font-weight: bold;
 			}
-			
+
 			#post-body .post-type-switcher::before {
 				content: '\f109';
 				font: 400 20px/1 dashicons;
