@@ -13,7 +13,7 @@
  * Plugin Name: Post Type Switcher
  * Plugin URI:  http://wordpress.org/extend/post-type-switcher/
  * Description: Allow switching of a post type while editing a post (in post publish section)
- * Version:     1.4
+ * Version:     1.5
  * Author:      johnjamesjacoby
  * Author URI:  http://johnjamesjacoby.com
  */

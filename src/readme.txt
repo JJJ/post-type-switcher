@@ -3,7 +3,7 @@ Contributors: johnjamesjacoby, beatpanda
 Tags: post type
 Requires at least: 3.0
 Tested up to: 4.1
-Stable tag: 1.4
+Stable tag: 1.5
 
 A simple way to change a post's type in WordPress
 
@@ -21,6 +21,9 @@ Note: Invisible post types (revisions, menus, etc...) are purposely excluded. Fi
 Now with bulk editing, thanks to Matthew Gerring!
 
 == Changelog ==
+
+= Version 1.5 - norcross =
+* Fix multiple quickedit dropdowns
 
 = Version 1.4 =
 * Improve handling of non-public post types
