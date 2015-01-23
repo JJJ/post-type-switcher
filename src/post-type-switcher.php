@@ -35,8 +35,9 @@ final class Post_Type_Switcher {
 	 */
 	public function __construct() {
 
-		if ( ! $this->is_allowed_page() )
+		if ( ! $this->is_allowed_page() ) {
 			return;
+		}
 
 		// @todo Remove this; since it's janky to need to do this.
 		add_action( 'manage_posts_columns',        array( $this, 'add_column'       )         );
@@ -148,10 +149,12 @@ final class Post_Type_Switcher {
 	 * @since PostTypeSwitcher (1.2)
 	 */
 	public function quickedit( $column_name, $post_type ) {
+
+		// Bail to prevent multiple dropdowns in each column
 		if ( $column_name !== 'post_type' ) {
 			return;
-		}
-	?>
+		} ?>
+
 		<fieldset class="inline-edit-col-right">
 			<div class="inline-edit-col">
 				<label class="alignleft">
@@ -161,6 +164,7 @@ final class Post_Type_Switcher {
 				</label>
 			</div>
 		</fieldset>
+
 	<?php
 	}
 
