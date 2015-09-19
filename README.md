@@ -17,6 +17,12 @@ Now with bulk editing, thanks to Matthew Gerring!
 
 ## Changelog
 
+### Version 1.6.0
+* Add textdomains for localization
+
+### Version 1.5 - norcross
+* Fix multiple quickedit dropdowns
+
 ### Version 1.4
 * Improve handling of non-public post types
 

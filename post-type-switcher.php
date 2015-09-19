@@ -11,11 +11,13 @@
 
 /**
  * Plugin Name: Post Type Switcher
- * Plugin URI:  http://wordpress.org/extend/post-type-switcher/
+ * Plugin URI:  https://wordpress.org/plugins/post-type-switcher/
  * Description: Allow switching of a post type while editing a post (in post publish section)
- * Version:     1.5
+ * Version:     1.6.0
  * Author:      johnjamesjacoby
  * Author URI:  http://johnjamesjacoby.com
+ * Text Domain: post-type-switcher
+ * Domain Path: /languages/
  */
 
 // Exit if accessed directly
@@ -31,10 +33,11 @@ final class Post_Type_Switcher {
 	/**
 	 * Setup the actions needed to execute class methods where needed
 	 *
-	 * @since PostTypeSwitcher (1.1)
+	 * @since 1.1.0
 	 */
 	public function __construct() {
 
+		// Bail if page not allowed
 		if ( ! $this->is_allowed_page() ) {
 			return;
 		}
@@ -58,7 +61,7 @@ final class Post_Type_Switcher {
 	 *
 	 * Adds post_publish metabox to allow changing post_type
 	 *
-	 * @since PostTypeSwitcher (0.3)
+	 * @since 0.3.0
 	 */
 	public function metabox() {
 
@@ -68,6 +71,8 @@ final class Post_Type_Switcher {
 			'public'  => true,
 			'show_ui' => true
 		) );
+
+		// Post types
 		$post_types = get_post_types( $args, 'objects' );
 		$cpt_object = get_post_type_object( get_post_type() );
 
@@ -83,12 +88,12 @@ final class Post_Type_Switcher {
 		} ?>
 
 		<div class="misc-pub-section misc-pub-section-last post-type-switcher">
-			<label for="pts_post_type"><?php _e( 'Post Type:' ); ?></label>
+			<label for="pts_post_type"><?php esc_html_e( 'Post Type:', 'post-type-switcher' ); ?></label>
 			<span id="post-type-display"><?php echo esc_html( $cpt_object->labels->singular_name ); ?></span>
 
 			<?php if ( current_user_can( $cpt_object->cap->publish_posts ) ) : ?>
 
-				<a href="#" id="edit-post-type-switcher" class="hide-if-no-js"><?php _e( 'Edit' ); ?></a>
+				<a href="#" id="edit-post-type-switcher" class="hide-if-no-js"><?php esc_html_e( 'Edit', 'post-type-switcher' ); ?></a>
 
 				<?php wp_nonce_field( 'post-type-selector', 'pts-nonce-select' ); ?>
 
@@ -106,8 +111,8 @@ final class Post_Type_Switcher {
 						<?php endforeach; ?>
 
 					</select>
-					<a href="#" id="save-post-type-switcher" class="hide-if-no-js button"><?php _e( 'OK' ); ?></a>
-					<a href="#" id="cancel-post-type-switcher" class="hide-if-no-js"><?php _e( 'Cancel' ); ?></a>
+					<a href="#" id="save-post-type-switcher" class="hide-if-no-js button"><?php esc_html_e( 'OK', 'post-type-switcher' ); ?></a>
+					<a href="#" id="cancel-post-type-switcher" class="hide-if-no-js"><?php esc_html_e( 'Cancel', 'post-type-switcher' ); ?></a>
 				</div>
 
 			<?php endif; ?>
@@ -120,16 +125,16 @@ final class Post_Type_Switcher {
 	/**
 	 * Adds the post type column
 	 *
-	 * @since PostTypeSwitcher (1.2)
+	 * @since 1.2.0
 	 */
 	public function add_column( $columns ) {
-		return array_merge( $columns,  array( 'post_type' => __( 'Type' ) ) );
+		return array_merge( $columns,  array( 'post_type' => esc_html__( 'Type', 'post-type-switcher' ) ) );
 	}
 
 	/**
 	 * Manages the post type column
 	 *
-	 * @since PostTypeSwitcher (1.1.1)
+	 * @since 1.1.1
 	 */
 	public function manage_column( $column, $post_id ) {
 		switch( $column ) {
@@ -146,7 +151,7 @@ final class Post_Type_Switcher {
 	/**
 	 * Adds quickedit button for bulk-editing post types
 	 *
-	 * @since PostTypeSwitcher (1.2)
+	 * @since 1.2.0
 	 */
 	public function quickedit( $column_name, $post_type ) {
 
@@ -158,7 +163,7 @@ final class Post_Type_Switcher {
 		<fieldset class="inline-edit-col-right">
 			<div class="inline-edit-col">
 				<label class="alignleft">
-					<span class="title"><?php _e( 'Post Type' ); ?></span>
+					<span class="title"><?php esc_html_e( 'Post Type', 'post-type-switcher' ); ?></span>
 					<?php wp_nonce_field( 'post-type-selector', 'pts-nonce-select' ); ?>
 					<?php $this->select_box(); ?>
 				</label>
@@ -171,7 +176,7 @@ final class Post_Type_Switcher {
 	/**
 	 * Adds quickedit script for getting values into quickedit box
 	 *
-	 * @since PostTypeSwitcher (1.2)
+	 * @since 1.2.0
 	 */
 	public function quickedit_script( $hook = '' ) {
 		if ( 'edit.php' !== $hook ) {
@@ -184,7 +189,7 @@ final class Post_Type_Switcher {
 	/**
 	 * Output a post-type dropdown
 	 *
-	 * @since PostTypeSwitcher (1.2)
+	 * @since 1.2.0
 	 */
 	public function select_box() {
 		$args = (array) apply_filters( 'pts_post_type_filter', array(
@@ -224,9 +229,11 @@ final class Post_Type_Switcher {
 	 * - Check new post-type exists
 	 * - Check that user can publish posts of new type
 	 *
-	 * @since PostTypeSwitcher (0.3)
-	 * @param int $post_id
-	 * @param object $post
+	 * @since 0.3.0
+	 *
+	 * @param  int     $post_id
+	 * @param  object  $post
+	 *
 	 * @return If any number of condtions are met
 	 */
 	public function save_post( $post_id, $post ) {
@@ -270,7 +277,8 @@ final class Post_Type_Switcher {
 	/**
 	 * Adds needed JS and CSS to admin header
 	 *
-	 * @since PostTypeSwitcher (0.3)
+	 * @since 0.3.0
+	 *
 	 * @return If on post-new.php
 	 */
 	public function admin_head() {
@@ -339,7 +347,8 @@ final class Post_Type_Switcher {
 	/**
 	 * Whether or not the current file requires the post type switcher
 	 *
-	 * @since PostTypeSwitcher (1.1)
+	 * @since 1.1.0
+	 *
 	 * @return bool True if it should load, false if not
 	 */
 	private static function is_allowed_page() {
