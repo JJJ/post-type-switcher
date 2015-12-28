@@ -20,6 +20,14 @@ Note: Invisible post types (revisions, menus, etc...) are purposely excluded. Fi
 
 Now with bulk editing, thanks to Matthew Gerring!
 
+== Frequently Asked Questions ==
+
+= Why would I need this? =
+You need to selectively change a posts type from one to another.
+
+= Does this ruin my taxonomy associations? =
+It should not. This plugin only changes the 'post_type' property of a post.
+
 == Changelog ==
 
 = Version 1.6.0 =
@@ -72,11 +80,3 @@ Now with bulk editing, thanks to Matthew Gerring!
 * Install the plugin into the plugins/post-type-swticher directory, and activate.
 * From the post edit screen, above the "Publish" button is the "Post Type" interface.
 * Change post types as needed.
-
-== Frequently Asked Questions ==
-
-= Why would I need this? =
-You need to selectively change a posts type from one to another.
-
-= Does this ruin my taxonomy associations? =
-It should not. This plugin only changes the 'post_type' property of a post.
