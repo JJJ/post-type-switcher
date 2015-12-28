@@ -41,6 +41,9 @@ final class Post_Type_Switcher {
 			return;
 		}
 
+		// Load plugin textdomain
+		add_action( 'plugins_loaded',              array( $this, 'load_textdomain'  )         );
+
 		// @todo Remove this; since it's janky to need to do this.
 		add_action( 'manage_posts_columns',        array( $this, 'add_column'       )         );
 		add_action( 'manage_pages_columns',        array( $this, 'add_column'       )         );
@@ -53,6 +56,17 @@ final class Post_Type_Switcher {
 		add_action(	'admin_enqueue_scripts',       array( $this, 'quickedit_script' ), 10,  1 );
 		add_action( 'save_post',                   array( $this, 'save_post'        ), 999, 2 ); // Late priority for plugin friendliness
 		add_action( 'admin_head',                  array( $this, 'admin_head'       )         );
+	}
+
+	/**
+	 * Load the plugin text domain for translation strings
+	 *
+	 * @since 1.6.0
+	 */
+	public function load_textdomain() {
+
+		load_plugin_textdomain( 'post-type-switcher' );
+
 	}
 
 	/**
