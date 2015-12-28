@@ -237,40 +237,53 @@ final class Post_Type_Switcher {
 	 */
 	public function save_post( $post_id, $post ) {
 
-		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return;
-		}
+		// Post type information.
+		$post_type        = $_REQUEST['pts_post_type'];
+		$post_type_object = get_post_type_object( $post_type );
 
-		if ( ! isset( $_REQUEST['pts-nonce-select'] ) ) {
-			return;
-		}
+		// Add nonce for security and authentication.
+		$nonce_name   = $_REQUEST['pts-nonce-select'];
+		$nonce_action = 'post-type-selector';
 
-		if ( ! wp_verify_nonce( $_REQUEST['pts-nonce-select'], 'post-type-selector' ) ) {
+		// Check if a nonce is set.
+		if ( ! isset( $nonce_name ) )
 			return;
-		}
 
-		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+		// Check if a nonce is valid.
+		if ( ! wp_verify_nonce( $nonce_name, $nonce_action ) )
 			return;
-		}
 
-		if ( empty( $_REQUEST['pts_post_type'] ) ) {
+		// Check if the user has permissions to 'edit_post'.
+		if ( ! current_user_can( 'edit_post', $post_id ) )
 			return;
-		}
 
-		if ( in_array( $post->post_type, array( $_REQUEST['pts_post_type'], 'revision' ) ) ) {
+		// Check if it's not an autosave.
+		if ( wp_is_post_autosave( $post_id ) )
 			return;
-		}
 
-		$new_post_type_object = get_post_type_object( $_REQUEST['pts_post_type'] );
-		if ( empty( $new_post_type_object ) ) {
+		// Check if it's not a revision.
+		if ( wp_is_post_revision( $post_id ) )
 			return;
-		}
 
-		if ( ! current_user_can( $new_post_type_object->cap->publish_posts ) ) {
+		// Check if a post type is set.
+		if ( empty( $post_type ) )
 			return;
-		}
 
-		set_post_type( $post_id, $new_post_type_object->name );
+		// Check if a post type object is set.
+		if ( empty( $post_type_object ) )
+			return;
+
+		// Check if it's not a revision.
+		if ( in_array( $post->post_type, array( $post_type, 'revision' ) ) )
+			return;
+
+		// Check if the user has permissions to 'publish_posts'.
+		if ( ! current_user_can( $post_type_object->cap->publish_posts ) )
+			return;
+
+		// Set the new post type.
+		set_post_type( $post_id, $post_type_object->name );
+
 	}
 
 	/**
@@ -291,14 +304,12 @@ final class Post_Type_Switcher {
 					jQuery( '#post-type-select' ).slideDown();
 					e.preventDefault();
 				});
-
 				jQuery( '#save-post-type-switcher' ).on( 'click', function(e) {
 					jQuery( '#post-type-select' ).slideUp();
 					jQuery( '#edit-post-type-switcher' ).show();
 					jQuery( '#post-type-display' ).text( jQuery( '#pts_post_type :selected' ).text() );
 					e.preventDefault();
 				});
-
 				jQuery( '#cancel-post-type-switcher' ).on( 'click', function(e) {
 					jQuery( '#post-type-select' ).slideUp();
 					jQuery( '#edit-post-type-switcher' ).show();
@@ -322,7 +333,6 @@ final class Post_Type_Switcher {
 			#post-type-display {
 				font-weight: bold;
 			}
-
 			#post-body .post-type-switcher::before {
 				content: '\f109';
 				font: 400 20px/1 dashicons;
