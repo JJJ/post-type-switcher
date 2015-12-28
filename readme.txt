@@ -65,6 +65,7 @@ It should not. This plugin only changes the 'post_type' property of a post.
 * Before saving data chack if it's not an autosave using wp_is_post_autosave()
 * Before saving data chack if it's not a revision using wp_is_post_revision()
 * Security: Prevent direct access to directories
+* Security: Translation strings escaping
 * Add a screenshote
 
 = Version 1.5 - norcross =
