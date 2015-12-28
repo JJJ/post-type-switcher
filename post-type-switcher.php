@@ -17,7 +17,6 @@
  * Author:      johnjamesjacoby
  * Author URI:  http://johnjamesjacoby.com
  * Text Domain: post-type-switcher
- * Domain Path: /languages/
  */
 
 // Exit if accessed directly
