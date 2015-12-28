@@ -18,7 +18,25 @@ Any combination is possible, even custom post types:
 
 Note: Invisible post types (revisions, menus, etc...) are purposely excluded. Filter 'pts_post_type_filter' to adjust the boundaries.
 
-Now with bulk editing, thanks to Matthew Gerring!
+== Installation ==
+
+= Installation =
+1. In your WordPress Dashboard go to "Plugins" -> "Add Plugin".
+2. Search for "Post Type Swticher".
+3. Install the plugin by pressing the "Install" button.
+4. Activate the plugin by pressing the "Activate" button.
+5. From the post edit screen, above the "Publish" button is the "Post Type" interface.
+6. Change post types as needed.
+
+= Minimum Requirements =
+* WordPress version 3.0 or greater.
+* PHP version 5.2.4 or greater.
+* MySQL version 5.0 or greater.
+
+= Recommended Requirements =
+* Latest WordPress version.
+* PHP version 5.6 or greater.
+* MySQL version 5.5 or greater.
 
 == Frequently Asked Questions ==
 
@@ -74,9 +92,3 @@ It should not. This plugin only changes the 'post_type' property of a post.
 
 = Version 0.1 =
 * Release
-
-== Installation ==
-
-* Install the plugin into the plugins/post-type-swticher directory, and activate.
-* From the post edit screen, above the "Publish" button is the "Post Type" interface.
-* Change post types as needed.
