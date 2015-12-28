@@ -9,14 +9,22 @@ A simple way to change a post's type in WordPress
 
 == Description ==
 
-Any combination is possible, even custom post types:
+This plugin adds a simple post type dropdown to the post editor interface, allowing you to reassign any post to a new post type. It allows you to switch post's type while editing your post.
+
+= Supported Types =
+
+The plugin can convert nearly every combination of posts, pages, attachments, and even custom post types:
 
 * Page to Post
 * Post to Page
 * Page to Attachment
 * Post to Custom
 
-Note: Invisible post types (revisions, menus, etc...) are purposely excluded. Filter 'pts_post_type_filter' to adjust the boundaries.
+Invisible post types, such as revisions, menus, etc., are purposely excluded. But, if you need to access invisible post types, you can adjust the boundaries using the 'pts_post_type_filter' filter.
+
+= Bulk Editing =
+
+With bulk editing, thanks to Matthew Gerring, you can select all the posts in a certain type and convert them to a new type with one quick action.
 
 == Installation ==
 
