@@ -54,6 +54,9 @@ You need to selectively change a posts type from one to another.
 = Does this ruin my taxonomy associations? =
 It should not. This plugin only changes the 'post_type' property of a post.
 
+== Screenshots ==
+1. "Post Type" interface in the post edit screen.
+
 == Changelog ==
 
 = Version 1.6.0 =
