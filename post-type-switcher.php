@@ -13,7 +13,7 @@
  * Plugin Name: Post Type Switcher
  * Plugin URI:  https://wordpress.org/plugins/post-type-switcher/
  * Description: Allow switching of a post type while editing a post (in post publish section)
- * Version:     1.6.0
+ * Version:     1.6
  * Author:      johnjamesjacoby
  * Author URI:  http://johnjamesjacoby.com
  * Text Domain: post-type-switcher
@@ -61,7 +61,7 @@ final class Post_Type_Switcher {
 	/**
 	 * Load the plugin text domain for translation strings
 	 *
-	 * @since 1.6.0
+	 * @since 1.6
 	 */
 	public function load_textdomain() {
 
@@ -74,7 +74,7 @@ final class Post_Type_Switcher {
 	 *
 	 * Adds post_publish metabox to allow changing post_type
 	 *
-	 * @since 0.3.0
+	 * @since 0.3
 	 */
 	public function metabox() {
 
@@ -138,7 +138,7 @@ final class Post_Type_Switcher {
 	/**
 	 * Adds the post type column
 	 *
-	 * @since 1.2.0
+	 * @since 1.2
 	 */
 	public function add_column( $columns ) {
 		return array_merge( $columns,  array( 'post_type' => esc_html__( 'Type', 'post-type-switcher' ) ) );
@@ -164,7 +164,7 @@ final class Post_Type_Switcher {
 	/**
 	 * Adds quickedit button for bulk-editing post types
 	 *
-	 * @since 1.2.0
+	 * @since 1.2
 	 */
 	public function quickedit( $column_name, $post_type ) {
 
@@ -189,7 +189,7 @@ final class Post_Type_Switcher {
 	/**
 	 * Adds quickedit script for getting values into quickedit box
 	 *
-	 * @since 1.2.0
+	 * @since 1.2
 	 */
 	public function quickedit_script( $hook = '' ) {
 		if ( 'edit.php' !== $hook ) {
@@ -202,7 +202,7 @@ final class Post_Type_Switcher {
 	/**
 	 * Output a post-type dropdown
 	 *
-	 * @since 1.2.0
+	 * @since 1.2
 	 */
 	public function select_box() {
 		$args = (array) apply_filters( 'pts_post_type_filter', array(
@@ -242,7 +242,7 @@ final class Post_Type_Switcher {
 	 * - Check new post-type exists
 	 * - Check that user can publish posts of new type
 	 *
-	 * @since 0.3.0
+	 * @since 0.3
 	 *
 	 * @param  int     $post_id
 	 * @param  object  $post
@@ -303,7 +303,7 @@ final class Post_Type_Switcher {
 	/**
 	 * Adds needed JS and CSS to admin header
 	 *
-	 * @since 0.3.0
+	 * @since 0.3
 	 *
 	 * @return If on post-new.php
 	 */
@@ -370,7 +370,7 @@ final class Post_Type_Switcher {
 	/**
 	 * Whether or not the current file requires the post type switcher
 	 *
-	 * @since 1.1.0
+	 * @since 1.1
 	 *
 	 * @return bool True if it should load, false if not
 	 */

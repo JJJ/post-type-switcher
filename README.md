@@ -54,7 +54,7 @@ It should not. This plugin only changes the 'post_type' property of a post.
 
 ## Changelog
 
-### Version 1.6.0
+### Version 1.6
 * Add textdomains for localization
 * Load translation strings using load_plugin_textdomain()
 * Before saving data chack if it's not an autosave using wp_is_post_autosave()

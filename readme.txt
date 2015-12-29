@@ -3,7 +3,7 @@ Contributors: johnjamesjacoby, beatpanda
 Tags: post type
 Requires at least: 3.0
 Tested up to: 4.4
-Stable tag: 1.6.0
+Stable tag: 1.6
 
 A simple way to change a post's type in WordPress
 
@@ -59,7 +59,7 @@ It should not. This plugin only changes the 'post_type' property of a post.
 
 == Changelog ==
 
-= Version 1.6.0 =
+= Version 1.6 =
 * Add textdomains for localization
 * Load translation strings using load_plugin_textdomain()
 * Before saving data chack if it's not an autosave using wp_is_post_autosave()
