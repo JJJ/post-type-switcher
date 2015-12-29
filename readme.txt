@@ -55,7 +55,9 @@ You need to selectively change a posts type from one to another.
 It should not. This plugin only changes the 'post_type' property of a post.
 
 == Screenshots ==
-1. "Post Type" interface in the post edit screen.
+1. "Type" column in "Posts" screen.
+2. "Post Type" interface in "Quick Edit".
+3. "Post Type" interface in "Edit Post" screen.
 
 == Changelog ==
 
@@ -66,7 +68,7 @@ It should not. This plugin only changes the 'post_type' property of a post.
 * Before saving data chack if it's not a revision using wp_is_post_revision()
 * Security: Prevent direct access to directories
 * Security: Translation strings escaping
-* Add a screenshote
+* Add screenshots
 
 = Version 1.5 - norcross =
 * Fix multiple quickedit dropdowns
