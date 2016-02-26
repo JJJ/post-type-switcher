@@ -61,6 +61,9 @@ It should not. This plugin only changes the 'post_type' property of a post.
 
 == Changelog ==
 
+= Version 1.7.0 =
+* Add support for network activation
+
 = Version 1.6.0 =
 * Add textdomains for localization
 * Load translation strings using load_plugin_textdomain()
