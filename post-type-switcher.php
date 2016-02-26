@@ -207,7 +207,7 @@ final class Post_Type_Switcher {
 			return;
 		}
 
-		wp_enqueue_script( 'pts_quickedit', plugins_url( 'js/quickedit.js', __FILE__ ), array( 'jquery' ), '', true );
+		wp_enqueue_script( 'pts_quickedit', plugin_dir_url( __FILE__ ) . 'assets/js/quickedit.js', array( 'jquery' ), '', true );
 	}
 
 	/**

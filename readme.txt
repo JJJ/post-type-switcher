@@ -1,9 +1,9 @@
 === Post Type Switcher ===
-Contributors: johnjamesjacoby, beatpanda
+Contributors: johnjamesjacoby, beatpanda, norcross, stuttter
 Tags: post type
 Requires at least: 3.0
-Tested up to: 4.4
-Stable tag: 1.6
+Tested up to: 4.5
+Stable tag: 1.7.0
 
 A simple way to change a post's type in WordPress
 
@@ -61,7 +61,7 @@ It should not. This plugin only changes the 'post_type' property of a post.
 
 == Changelog ==
 
-= Version 1.6 =
+= Version 1.6.0 =
 * Add textdomains for localization
 * Load translation strings using load_plugin_textdomain()
 * Before saving data chack if it's not an autosave using wp_is_post_autosave()
@@ -70,19 +70,19 @@ It should not. This plugin only changes the 'post_type' property of a post.
 * Security: Translation strings escaping
 * Add screenshots
 
-= Version 1.5 - norcross =
+= Version 1.5.0 - norcross =
 * Fix multiple quickedit dropdowns
 
-= Version 1.4 =
+= Version 1.4.0 =
 * Improve handling of non-public post types
 
-= Version 1.3 =
+= Version 1.3.0 =
 * Fix saving of autodrafts
 
 = Version 1.2.1 =
 * Improved WordPress 3.9 integration (added dashicon to publish metabox)
 
-= Version 1.2 =
+= Version 1.2.0 =
 * Add bulk editing to supported post types
 * Props Matthew Gerring for bulk edit contribution
 
@@ -92,22 +92,22 @@ It should not. This plugin only changes the 'post_type' property of a post.
 * Remove ending closing php tag
 * HTML and PHPDoc improvements
 
-= Version 1.1 =
+= Version 1.1.0 =
 * Fix revisions being nooped
 * Fix malformed HTML for some user roles
 * Classificationate
 
-= Version 1.0 =
+= Version 1.0.0 =
 * Fix JS bugs
 * Audit post save bail conditions
 * Tweak UI for WordPress 3.3
 
-= Version 0.3 =
+= Version 0.3.0 =
 * Use the API to change the post type, fixing a conflict with persistent object caches
 * No longer requires JavaScript
 
-= Version 0.2 =
+= Version 0.2.0 =
 * Disallow post types that are not public and do not have a visible UI
 
-= Version 0.1 =
+= Version 0.1.0 =
 * Release
