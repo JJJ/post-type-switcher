@@ -61,6 +61,11 @@ It should not. This plugin only changes the 'post_type' property of a post.
 
 == Changelog ==
 
+= Version 2.0.0 =
+* Improved plugin compatibility with WooThemes Sensei
+* Filter post arguments vs. hook to save_post
+* Add "post_type_switcher" action
+
 = Version 1.7.0 =
 * Add support for network activation
 
