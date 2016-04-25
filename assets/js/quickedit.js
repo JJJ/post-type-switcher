@@ -1,3 +1,4 @@
+/* global inlineEditPost */
 function pts_quick_edit() {
 
 	var $ = jQuery;
@@ -15,14 +16,14 @@ function pts_quick_edit() {
 
 		var
 
-		// editRow is the quick-edit row, containing the inputs that need to be updated
-		editRow   = $( '#edit-' + id ),
+			// editRow is the quick-edit row, containing the inputs that need to be updated
+			editRow   = $( '#edit-' + id ),
 
-		// postRow is the row shown when a book isn't being edited, which also holds the existing values.
-		postRow   = $( '#post-' + id ),
-		
-		// get the existing values
-		post_type = $( '.post_type', postRow ).data( 'post-type' );
+			// postRow is the row shown when a book isn't being edited, which also holds the existing values.
+			postRow   = $( '#post-' + id ),
+
+			// get the existing values
+			post_type = $( '.post_type', postRow ).data( 'post-type' );
 		
 		// set the values in the quick-editor
 		$( 'select[name="pts_post_type"] option[value="' + post_type + '"]', editRow ).attr( 'selected', 'selected' );
