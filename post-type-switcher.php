@@ -388,19 +388,21 @@ final class Post_Type_Switcher {
 	private static function is_allowed_page() {
 
 		// Only for admin area
-		if ( ! is_blog_admin() ) {
-			return false;
+		if ( is_blog_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX && ( ! empty( $_REQUEST['action'] ) && 'inline_save' === $_REQUEST['action'] ) ) ) {
+
+			// Allowed admin pages
+			$pages = apply_filters( 'pts_allowed_pages', array(
+				'post.php',
+				'edit.php',
+				'admin-ajax.php'
+			) );
+
+			// Only show switcher when editing
+			return (bool) in_array( $GLOBALS['pagenow'], $pages, true );
 		}
 
-		// Allowed admin pages
-		$pages = apply_filters( 'pts_allowed_pages', array(
-			'post.php',
-			'edit.php',
-			'admin-ajax.php'
-		) );
-
-		// Only show switcher when editing
-		return (bool) in_array( $GLOBALS['pagenow'], $pages, true );
+		// Default to false
+		return false;
 	}
 
 	/**
