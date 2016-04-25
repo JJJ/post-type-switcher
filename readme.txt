@@ -3,7 +3,7 @@ Contributors: johnjamesjacoby, beatpanda, norcross, stuttter
 Tags: post type
 Requires at least: 3.0
 Tested up to: 4.6
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 
 A simple way to change a post's type in WordPress
 
@@ -60,6 +60,10 @@ It should not. This plugin only changes the 'post_type' property of a post.
 3. "Post Type" interface in "Edit Post" screen.
 
 == Changelog ==
+
+= Version 2.0.1 =
+* Ensure quick-edit works with new procedure
+* Quick-edit "Type" column works again!
 
 = Version 2.0.0 =
 * Improved plugin compatibility with WooThemes Sensei
