@@ -388,7 +388,7 @@ final class Post_Type_Switcher {
 	private static function is_allowed_page() {
 
 		// Only for admin area
-		if ( is_blog_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX && ( ! empty( $_REQUEST['action'] ) && 'inline_save' === $_REQUEST['action'] ) ) ) {
+		if ( is_blog_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX && ( ! empty( $_REQUEST['action'] ) && ( 'inline-save' === $_REQUEST['action'] ) ) ) ) {
 
 			// Allowed admin pages
 			$pages = apply_filters( 'pts_allowed_pages', array(
