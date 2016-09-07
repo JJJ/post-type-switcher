@@ -4,9 +4,21 @@ function pts_quick_edit() {
 	var $ = jQuery;
 	var _edit = inlineEditPost.edit;
 
+	$( '#bulk-edit' )
+		.find( '.inline-edit-col-right .inline-edit-col' )
+		.append(
+			$('#bulk-edit #pts_bulk_edit' )
+		);
+
+	$( '.inline-edit-row' ).not( '#bulk-edit' )
+		.find( '.inline-edit-col-right .inline-edit-col' )
+		.append(
+			$( '.inline-edit-row #pts_quick_edit' )
+		);
+
 	inlineEditPost.edit = function( id ) {
 
-		var args = [].slice.call(arguments );
+		var args = [].slice.call( arguments );
 
 		_edit.apply( this, args );
 
@@ -16,17 +28,17 @@ function pts_quick_edit() {
 
 		var
 
-			// editRow is the quick-edit row, containing the inputs that need to be updated
-			editRow   = $( '#edit-' + id ),
+			// edit_row is the quick-edit row, containing the inputs that need to be updated
+			edit_row   = $( '#edit-' + id ),
 
-			// postRow is the row shown when a book isn't being edited, which also holds the existing values.
-			postRow   = $( '#post-' + id ),
+			// post_row is the row shown when a book isn't being edited, which also holds the existing values.
+			post_row   = $( '#post-' + id ),
 
 			// get the existing values
-			post_type = $( '.post_type', postRow ).data( 'post-type' );
-		
+			post_type = $( 'td.post_type span', post_row ).data( 'post-type' );
+
 		// set the values in the quick-editor
-		$( 'select[name="pts_post_type"] option[value="' + post_type + '"]', editRow ).attr( 'selected', 'selected' );
+		$( 'select[name="pts_post_type"] option[value="' + post_type + '"]', edit_row ).attr( 'selected', 'selected' );
 	};
 }
 

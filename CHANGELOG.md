@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+
+## 3.0.0
+* Improved Quick-Edit and Bulk-Edit support
+* Remove `attachment` type support for now, as there is no way to switch back
+* Fix bug causing some post-types to switch unexpectedly
+
 ## 2.0.1
 * Ensure quick-edit works with new procedure
 * Quick-edit "Type" column works again!

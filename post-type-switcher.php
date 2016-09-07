@@ -16,7 +16,7 @@
  * License:     GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Description: Allow switching of a post type while editing a post (in post publish section)
- * Version:     2.0.1
+ * Version:     3.0.0
  * Text Domain: post-type-switcher
  * Domain Path: /assets/lang/
  */
@@ -30,6 +30,15 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.0.0
  */
 final class Post_Type_Switcher {
+
+	/**
+	 * Asset version, for cache busting
+	 *
+	 * @since 3.0.1
+	 *
+	 * @var int
+	 */
+	private $asset_version = 201609170001;
 
 	/**
 	 * Hook in the basic early actions
@@ -71,11 +80,11 @@ final class Post_Type_Switcher {
 		add_action( 'manage_pages_custom_column',  array( $this, 'manage_column' ), 10,  2 );
 
 		// Add UI to "Publish" metabox
-		add_action( 'admin_head',                  array( $this, 'admin_head'       ) );
-		add_action( 'post_submitbox_misc_actions', array( $this, 'metabox'          ) );
-		add_action( 'quick_edit_custom_box',       array( $this, 'quickedit'        ), 10,  2 );
-		add_action( 'bulk_edit_custom_box',        array( $this, 'quickedit'        ), 10,  2 );
-		add_action(	'admin_enqueue_scripts',       array( $this, 'quickedit_script' ), 10,  1 );
+		add_action( 'admin_head',                  array( $this, 'admin_head'        ) );
+		add_action( 'post_submitbox_misc_actions', array( $this, 'metabox'           ) );
+		add_action( 'quick_edit_custom_box',       array( $this, 'quick_edit'        ) );
+		add_action( 'bulk_edit_custom_box',        array( $this, 'quick_edit_bulk'   ) );
+		add_action(	'admin_enqueue_scripts',       array( $this, 'quick_edit_script' ) );
 
 		// Override
 		add_filter( 'wp_insert_attachment_data', array( $this, 'override_type' ), 10, 2 );
@@ -108,9 +117,14 @@ final class Post_Type_Switcher {
 		// https://wordpress.org/support/topic/dont-show-for-non-public-post-types?replies=4#post-5849287
 		if ( ! in_array( $cpt_object, $post_types, true ) ) {
 			$post_types[ $post_type ] = $cpt_object;
-		} ?>
+		}
 
-		<div class="misc-pub-section misc-pub-section-last post-type-switcher">
+		// Unset attachment types, since support seems to be broken
+		if ( isset( $post_types['attachment'] ) ) {
+			unset( $post_types['attachment'] );
+		}
+
+		?><div class="misc-pub-section misc-pub-section-last post-type-switcher">
 			<label for="pts_post_type"><?php esc_html_e( 'Post Type:', 'post-type-switcher' ); ?></label>
 			<span id="post-type-display"><?php echo esc_html( $cpt_object->labels->singular_name ); ?></span>
 
@@ -175,25 +189,47 @@ final class Post_Type_Switcher {
 	 *
 	 * @since 1.2.0
 	 */
-	public function quickedit( $column_name, $post_type ) {
+	public function quick_edit( $column_name = '' ) {
 
 		// Bail to prevent multiple dropdowns in each column
 		if ( 'post_type' !== $column_name ) {
 			return;
 		} ?>
 
-		<fieldset class="inline-edit-col-right">
-			<div class="inline-edit-col">
-				<label class="alignleft">
-					<span class="title"><?php esc_html_e( 'Post Type', 'post-type-switcher' ); ?></span><?php
+		<div id="pts_quick_edit" class="inline-edit-group wp-clearfix">
+			<label class="alignleft">
+				<span class="title"><?php esc_html_e( 'Post Type', 'post-type-switcher' ); ?></span><?php
 
-					wp_nonce_field( 'post-type-selector', 'pts-nonce-select' );
+				wp_nonce_field( 'post-type-selector', 'pts-nonce-select' );
 
-					$this->select_box();
+				$this->select_box();
 
-				?></label>
-			</div>
-		</fieldset>
+			?></label>
+		</div>
+
+	<?php
+	}
+
+	/**
+	 * Adds quickedit button for bulk-editing post types
+	 *
+	 * @since 1.2.0
+	 */
+	public function quick_edit_bulk( $column_name = '' ) {
+
+		// Bail to prevent multiple dropdowns in each column
+		if ( 'post_type' !== $column_name ) {
+			return;
+		} ?>
+
+		<label id="pts_bulk_edit" class="alignleft">
+			<span class="title"><?php esc_html_e( 'Post Type', 'post-type-switcher' ); ?></span><?php
+
+			wp_nonce_field( 'post-type-selector', 'pts-nonce-select' );
+
+			$this->select_box( true );
+
+		?></label>
 
 	<?php
 	}
@@ -203,13 +239,15 @@ final class Post_Type_Switcher {
 	 *
 	 * @since 1.2
 	 */
-	public function quickedit_script( $hook = '' ) {
+	public function quick_edit_script( $hook = '' ) {
 
+		// Bail if not edit.php admin page
 		if ( 'edit.php' !== $hook ) {
 			return;
 		}
 
-		wp_enqueue_script( 'pts_quickedit', plugin_dir_url( __FILE__ ) . 'assets/js/quickedit.js', array( 'jquery' ), '', true );
+		// Enqueue quick edit JS
+		wp_enqueue_script( 'pts_quickedit', plugin_dir_url( __FILE__ ) . 'assets/js/quickedit.js', array( 'jquery' ), $this->asset_version, true );
 	}
 
 	/**
@@ -217,24 +255,52 @@ final class Post_Type_Switcher {
 	 *
 	 * @since 1.2
 	 */
-	public function select_box() {
-		$post_types = get_post_types( $this->get_post_type_args(), 'objects' );
-		$post_type  = get_post_type();
+	public function select_box( $bulk = false ) {
 
+		// Get post type specific data
+		$args       = $this->get_post_type_args();
+		$post_types = get_post_types( $args, 'objects' );
+		$post_type  = get_post_type();
+		$selected   = '';
+
+		// Unset attachment types, since support seems to be broken
+		if ( isset( $post_types['attachment'] ) ) {
+			unset( $post_types['attachment'] );
+		}
+
+		// Start an output buffer
+		ob_start();
+
+		// Output
 		?><select name="pts_post_type" id="pts_post_type"><?php
 
+			// Maybe include "No Change" option for bulk
+			if ( true === $bulk ) :
+				?><option value="-1"><?php esc_html_e( '&mdash; No Change &mdash;', 'post-type-switcher' ); ?></option><?php
+			endif;
+
+			// Loop through post types
 			foreach ( $post_types as $_post_type => $pt ) :
 
+				// Skip if user cannot publish this type of post
 				if ( ! current_user_can( $pt->cap->publish_posts ) ) :
 					continue;
 				endif;
 
-				?><option value="<?php echo esc_attr( $pt->name ); ?>" <?php selected( $post_type, $_post_type ); ?>><?php echo esc_html( $pt->labels->singular_name ); ?></option><?php
+				// Only select if not bulk
+				if ( false === $bulk ) :
+					$selected = selected( $post_type, $_post_type );
+				endif;
+
+				// Output option
+				?><option value="<?php echo esc_attr( $pt->name ); ?>" <?php echo $selected; // Do not escape ?>><?php echo esc_html( $pt->labels->singular_name ); ?></option><?php
 
 			endforeach;
 
 		?></select><?php
 
+		// Output the current buffer
+		echo ob_get_clean();
 	}
 
 	/**
@@ -343,6 +409,9 @@ final class Post_Type_Switcher {
 			});
 		</script>
 		<style type="text/css">
+			#wpbody-content .inline-edit-row .inline-edit-col-right .alignleft + .alignleft {
+				float: right;
+			}
 			#post-type-select {
 				line-height: 2.5em;
 				margin-top: 3px;

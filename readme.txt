@@ -1,24 +1,29 @@
 === Post Type Switcher ===
 Contributors: johnjamesjacoby, beatpanda, norcross, stuttter
-Tags: post type
+Tags: post, page, type, types, post type
 Requires at least: 3.0
-Tested up to: 4.6
-Stable tag: 2.0.1
+Tested up to: 4.7
+Stable tag: 3.0.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9Q4F4EL5YJ62J
 
 A simple way to change a post's type in WordPress
 
 == Description ==
 
-This plugin adds a simple post type dropdown to the post editor interface, allowing you to reassign any post to a new post type. It allows you to switch post's type while editing your post.
+This plugin adds a simple post-type drop-down to the post editor interface, allowing you to reassign any post to a new post type. It allows you to switch post's type while editing your post.
 
 = Supported Types =
 
-The plugin can convert nearly every combination of posts, pages, attachments, and even custom post types:
+The plugin can convert nearly every combination of posts, pages, and even custom post types:
 
 * Page to Post
 * Post to Page
-* Page to Attachment
 * Post to Custom
+* Custom to Custom
+
+As of 3.0.0, support for switching to or from Attachments was removed. This may come back in a subsequent version.
 
 Invisible post types, such as revisions, menus, etc., are purposely excluded. But, if you need to access invisible post types, you can adjust the boundaries using the 'pts_post_type_filter' filter.
 
@@ -30,7 +35,7 @@ With bulk editing, thanks to Matthew Gerring, you can select all the posts in a 
 
 = Installation =
 1. In your WordPress Dashboard go to "Plugins" -> "Add Plugin".
-2. Search for "Post Type Swticher".
+2. Search for "Post Type Switcher".
 3. Install the plugin by pressing the "Install" button.
 4. Activate the plugin by pressing the "Activate" button.
 5. From the post edit screen, above the "Publish" button is the "Post Type" interface.
@@ -43,8 +48,8 @@ With bulk editing, thanks to Matthew Gerring, you can select all the posts in a 
 
 = Recommended Requirements =
 * Latest WordPress version.
-* PHP version 5.6 or greater.
-* MySQL version 5.5 or greater.
+* PHP version 7.0 or greater.
+* MySQL version 5.7 or greater, or MariaDB 10 or greater.
 
 == Frequently Asked Questions ==
 
@@ -61,19 +66,24 @@ It should not. This plugin only changes the 'post_type' property of a post.
 
 == Changelog ==
 
-= Version 2.0.1 =
+= 3.0.0 =
+* Improved Quick-Edit and Bulk-Edit support
+* Remove `attachment` type support for now, as there is no way to switch back
+* Fix bug causing some post-types to switch unexpectedly
+
+= 2.0.1 =
 * Ensure quick-edit works with new procedure
 * Quick-edit "Type" column works again!
 
-= Version 2.0.0 =
+= 2.0.0 =
 * Improved plugin compatibility with WooThemes Sensei
 * Filter post arguments vs. hook to save_post
 * Add "post_type_switcher" action
 
-= Version 1.7.0 =
+= 1.7.0 =
 * Add support for network activation
 
-= Version 1.6.0 =
+= 1.6.0 =
 * Add textdomains for localization
 * Load translation strings using load_plugin_textdomain()
 * Before saving data chack if it's not an autosave using wp_is_post_autosave()
@@ -82,44 +92,44 @@ It should not. This plugin only changes the 'post_type' property of a post.
 * Security: Translation strings escaping
 * Add screenshots
 
-= Version 1.5.0 - norcross =
+= 1.5.0 - norcross =
 * Fix multiple quickedit dropdowns
 
-= Version 1.4.0 =
+= 1.4.0 =
 * Improve handling of non-public post types
 
-= Version 1.3.0 =
+= 1.3.0 =
 * Fix saving of autodrafts
 
-= Version 1.2.1 =
+= 1.2.1 =
 * Improved WordPress 3.9 integration (added dashicon to publish metabox)
 
-= Version 1.2.0 =
+= 1.2.0 =
 * Add bulk editing to supported post types
 * Props Matthew Gerring for bulk edit contribution
 
-= Version 1.1.1 =
+= 1.1.1 =
 * Add is_admin() check to prevent theme-side interference
 * Change save_post priority to 999 to avoid plugin compatibility issues
 * Remove ending closing php tag
 * HTML and PHPDoc improvements
 
-= Version 1.1.0 =
+= 1.1.0 =
 * Fix revisions being nooped
 * Fix malformed HTML for some user roles
-* Classificationate
+* Make a singleton (meh...)
 
-= Version 1.0.0 =
+= 1.0.0 =
 * Fix JS bugs
 * Audit post save bail conditions
 * Tweak UI for WordPress 3.3
 
-= Version 0.3.0 =
+= 0.3.0 =
 * Use the API to change the post type, fixing a conflict with persistent object caches
 * No longer requires JavaScript
 
-= Version 0.2.0 =
+= 0.2.0 =
 * Disallow post types that are not public and do not have a visible UI
 
-= Version 0.1.0 =
+= 0.1.0 =
 * Release
