@@ -84,7 +84,7 @@ final class Post_Type_Switcher {
 		add_action( 'post_submitbox_misc_actions', array( $this, 'metabox'           ) );
 		add_action( 'quick_edit_custom_box',       array( $this, 'quick_edit'        ) );
 		add_action( 'bulk_edit_custom_box',        array( $this, 'quick_edit_bulk'   ) );
-		add_action(	'admin_enqueue_scripts',       array( $this, 'quick_edit_script' ) );
+		add_action( 'admin_enqueue_scripts',       array( $this, 'quick_edit_script' ) );
 
 		// Override
 		add_filter( 'wp_insert_attachment_data', array( $this, 'override_type' ), 10, 2 );
@@ -95,9 +95,7 @@ final class Post_Type_Switcher {
 	}
 
 	/**
-	 * pts_metabox()
-	 *
-	 * Adds post_publish metabox to allow changing post_type
+	 * Output meta box fields on New/Edit Post screen
 	 *
 	 * @since 1.0.0
 	 */
@@ -331,17 +329,40 @@ final class Post_Type_Switcher {
 			return $data;
 		}
 
+		// Bail if no specific post ID is being saved
+		if ( empty( $postarr['post_ID'] ) ) {
+			return $data;
+		}
+
 		// Post type information
+		$post_id          = absint( $postarr['post_ID'] );
 		$post_type        = sanitize_key( $_REQUEST['pts_post_type'] );
 		$post_type_object = get_post_type_object( $post_type );
 
 		// Bail if empty post type
-		if ( empty( $post_type ) || empty( $post_type_object ) ) {
+		if ( empty( $post_id ) || empty( $post_type ) || empty( $post_type_object ) ) {
 			return $data;
 		}
 
-		// Bail if user cannot 'edit_post'
+		// Bail if no change
+		if ( $post_type === $data['post_type'] ) {
+			return $data;
+		}
+
+		// Bail if posted ID to update does not match the post ID being changed.
+		// This is to prevent child posts (or related) from also being changed.
+		// See: https://github.com/JJJ/post-type-switcher/issues/9
+		if ( $post_id !== $postarr['ID'] ) {
+			return $data;
+		}
+
+		// Bail if user cannot 'edit_post' on the current post ID
 		if ( ! current_user_can( 'edit_post', $postarr['ID'] ) ) {
+			return $data;
+		}
+
+		// Bail if user cannot 'publish_posts' on the new type
+		if ( ! current_user_can( $post_type_object->cap->publish_posts ) ) {
 			return $data;
 		}
 
@@ -362,11 +383,6 @@ final class Post_Type_Switcher {
 
 		// Bail if it's a revision
 		if ( in_array( $postarr['post_type'], array( $post_type, 'revision' ), true ) ) {
-			return $data;
-		}
-
-		// Bail if user cannot 'publish_posts' on the new type
-		if ( ! current_user_can( $post_type_object->cap->publish_posts ) ) {
 			return $data;
 		}
 
