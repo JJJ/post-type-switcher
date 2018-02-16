@@ -74,10 +74,11 @@ final class Post_Type_Switcher {
 		}
 
 		// Add column for quick-edit support
-		add_action( 'manage_posts_columns',        array( $this, 'add_column'    ) );
-		add_action( 'manage_pages_columns',        array( $this, 'add_column'    ) );
-		add_action( 'manage_posts_custom_column',  array( $this, 'manage_column' ), 10,  2 );
-		add_action( 'manage_pages_custom_column',  array( $this, 'manage_column' ), 10,  2 );
+		$post_type_names = get_post_types( $this->get_post_type_args(), 'names' );
+		foreach ( $post_type_names as $name ) {
+			add_filter( "manage_{$name}_posts_columns",       array( $this, 'add_column'    )        );
+			add_action( "manage_{$name}_posts_custom_column", array( $this, 'manage_column' ), 10, 2 );
+		}
 
 		// Add UI to "Publish" metabox
 		add_action( 'admin_head',                  array( $this, 'admin_head'        ) );
@@ -457,6 +458,9 @@ final class Post_Type_Switcher {
 				-moz-osx-font-smoothing: grayscale;
 				text-decoration: none !important;
 				color: #888;
+			}
+			.wp-list-table .column-post_type {
+				width: 10%;
 			}
 		</style>
 
