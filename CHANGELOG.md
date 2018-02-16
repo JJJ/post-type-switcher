@@ -3,6 +3,8 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 3.1.0
+* Fix post targeting when called recursively
 
 ## 3.0.0
 * Improved Quick-Edit and Bulk-Edit support

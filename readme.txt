@@ -2,8 +2,8 @@
 Contributors: johnjamesjacoby, beatpanda, norcross, stuttter
 Tags: post, page, type, types, post type
 Requires at least: 3.0
-Tested up to: 4.7
-Stable tag: 3.0.0
+Tested up to: 4.9
+Stable tag: 3.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9Q4F4EL5YJ62J
@@ -65,6 +65,9 @@ It should not. This plugin only changes the 'post_type' property of a post.
 3. "Post Type" interface in "Edit Post" screen.
 
 == Changelog ==
+
+= 3.1.0 =
+* Fix post targeting when called recursively
 
 = 3.0.0 =
 * Improved Quick-Edit and Bulk-Edit support
