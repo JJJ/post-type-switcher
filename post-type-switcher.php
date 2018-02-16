@@ -16,7 +16,7 @@
  * License:     GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Description: Allow switching of a post type while editing a post (in post publish section)
- * Version:     3.1.0
+ * Version:     3.1.1
  * Text Domain: post-type-switcher
  * Domain Path: /assets/lang/
  */
@@ -38,7 +38,7 @@ final class Post_Type_Switcher {
 	 *
 	 * @var int
 	 */
-	private $asset_version = 201609170001;
+	private $asset_version = 201802160001;
 
 	/**
 	 * Hook in the basic early actions

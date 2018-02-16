@@ -5,13 +5,13 @@ function pts_quick_edit() {
 	var _edit = inlineEditPost.edit;
 
 	$( '#bulk-edit' )
-		.find( '.inline-edit-col-right .inline-edit-col' )
+		.find( '.inline-edit-col-right:first .inline-edit-col' )
 		.append(
 			$('#bulk-edit #pts_bulk_edit' )
 		);
 
 	$( '.inline-edit-row' ).not( '#bulk-edit' )
-		.find( '.inline-edit-col-right .inline-edit-col' )
+		.find( '.inline-edit-col-right:first .inline-edit-col' )
 		.append(
 			$( '.inline-edit-row #pts_quick_edit' )
 		);
