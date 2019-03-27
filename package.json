@@ -1,0 +1,21 @@
+{
+  "name": "post-type-switcher",
+  "version": "0.0.0",
+  "description": "The simplest way to change a post's type in WordPress",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jjj/post-type-switcher.git"
+  },
+  "scripts": {
+    "start": "wp-scripts start",
+    "build": "wp-scripts build"
+  },
+  "license": "GPL-2.0+",
+  "bugs": {
+    "url": "https://github.com/jjj/post-type-switcher/issues"
+  },
+  "homepage": "https://github.com/jjj/post-type-switcher#readme",
+  "devDependencies": {
+    "@wordpress/scripts": "^3.1.0"
+  }
+}
