@@ -81,11 +81,12 @@ final class Post_Type_Switcher {
 		}
 
 		// Add UI to "Publish" metabox
-		add_action( 'admin_head',                  array( $this, 'admin_head'        ) );
-		add_action( 'post_submitbox_misc_actions', array( $this, 'metabox'           ) );
-		add_action( 'quick_edit_custom_box',       array( $this, 'quick_edit'        ) );
-		add_action( 'bulk_edit_custom_box',        array( $this, 'quick_edit_bulk'   ) );
-		add_action( 'admin_enqueue_scripts',       array( $this, 'quick_edit_script' ) );
+		add_action( 'admin_head',                  array( $this, 'admin_head'          ) );
+		add_action( 'post_submitbox_misc_actions', array( $this, 'metabox'             ) );
+		add_action( 'quick_edit_custom_box',       array( $this, 'quick_edit'          ) );
+		add_action( 'bulk_edit_custom_box',        array( $this, 'quick_edit_bulk'     ) );
+		add_action( 'admin_enqueue_scripts',       array( $this, 'quick_edit_script'   ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'block_editor_assets' ) );
 
 		// Override
 		add_filter( 'wp_insert_attachment_data', array( $this, 'override_type' ), 10, 2 );
@@ -247,6 +248,20 @@ final class Post_Type_Switcher {
 
 		// Enqueue quick edit JS
 		wp_enqueue_script( 'pts_quickedit', plugin_dir_url( __FILE__ ) . 'assets/js/quickedit.js', array( 'jquery' ), $this->asset_version, true );
+	}
+
+	/**
+	 * Enqueues modifications to the block editor.
+	 *
+	 * @since 3.2
+	 */
+	public function block_editor_assets() {
+		wp_enqueue_script(
+			'pts_blockeditor',
+			plugin_dir_url( __FILE__ ) . 'build/index.js',
+			array( 'wp-components', 'wp-edit-post', 'wp-plugins' ),
+			$this->asset_version
+		);
 	}
 
 	/**
