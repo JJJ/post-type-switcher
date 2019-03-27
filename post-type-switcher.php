@@ -256,11 +256,38 @@ final class Post_Type_Switcher {
 	 * @since 3.2
 	 */
 	public function block_editor_assets() {
+
+		$current_post_type        = get_post_type();
+		$current_post_type_object = get_post_type_object( $current_post_type );
+		if ( ! current_user_can( $current_post_type_object->cap->publish_posts ) ) {
+			return;
+		}
+
 		wp_enqueue_script(
 			'pts_blockeditor',
 			plugin_dir_url( __FILE__ ) . 'build/index.js',
-			array( 'wp-components', 'wp-edit-post', 'wp-plugins' ),
+			array( 'wp-components', 'wp-edit-post', 'wp-i18n', 'wp-plugins' ),
 			$this->asset_version
+		);
+		$args                 = $this->get_post_type_args();
+		$available_post_types = array();
+		foreach ( get_post_types( $args, 'objects' ) as $post_type ) {
+			if ( ! current_user_can( $post_type->cap->publish_posts ) ) {
+				continue;
+			}
+			$available_post_types[] = array(
+				'value' => $post_type->name,
+				'label' => $post_type->labels->singular_name,
+			);
+		}
+		wp_localize_script(
+			'pts_blockeditor',
+			'ptsBlockEditor',
+			array(
+				'availablePostTypes'   => $available_post_types,
+				'currentPostType'      => $current_post_type,
+				'currentPostTypeLabel' => $current_post_type_object->labels->singular_name,
+			)
 		);
 	}
 
