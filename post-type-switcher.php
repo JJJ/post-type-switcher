@@ -86,6 +86,8 @@ final class Post_Type_Switcher {
 		add_action( 'quick_edit_custom_box',       array( $this, 'quick_edit'          ) );
 		add_action( 'bulk_edit_custom_box',        array( $this, 'quick_edit_bulk'     ) );
 		add_action( 'admin_enqueue_scripts',       array( $this, 'quick_edit_script'   ) );
+
+		// Add UI to the block editor
 		add_action( 'enqueue_block_editor_assets', array( $this, 'block_editor_assets' ) );
 
 		// Override
