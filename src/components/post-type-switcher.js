@@ -11,13 +11,17 @@ const PostTypeSwitcherForm = () => {
 			<legend className="editor-post-visibility__dialog-legend">
 				{ __( 'Post Type Switcher', 'pts' ) }
 			</legend>
-			{ ptsBlockEditor.availablePostTypes.map( ( { value, label } ) => (
+			{ window.ptsBlockEditor.availablePostTypes.map( ( { value, label } ) => (
 				<div key={ value } className="editor-post-visibility__choice">
 					<input
 						type="radio"
 						name={ `editor-post-visibility__setting` }
 						value={ value }
-						checked={ value === ptsBlockEditor.currentPostType }
+						onChange={ () => {
+							window.ptsBlockEditor.currentPostType = value;
+							window.location.href = window.ptsBlockEditor.changeUrl + '&pts_post_type=' + value;
+						} }
+						checked={ value === window.ptsBlockEditor.currentPostType }
 						id={ `editor-post-type-switcher-${ value }` }
 						className="editor-visibility__dialog-radio"
 					/>
@@ -34,9 +38,6 @@ const PostTypeSwitcherForm = () => {
 };
 
 const PostTypeSwitcher = ( { children, className } ) => {
-	const onToggle = () => {
-		return false;
-	};
 	return(
 		<PluginPostStatusInfo>
 			<span>{ __( 'Post Type' ) }</span>
@@ -51,7 +52,7 @@ const PostTypeSwitcher = ( { children, className } ) => {
 						onClick={ onToggle }
 						isLink
 					>
-						{ptsBlockEditor.currentPostTypeLabel}
+						{window.ptsBlockEditor.currentPostTypeLabel}
 					</Button>
 				) }
 				renderContent={ () => <PostTypeSwitcherForm /> }
