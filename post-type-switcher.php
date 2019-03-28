@@ -269,7 +269,7 @@ final class Post_Type_Switcher {
 		wp_enqueue_script(
 			'pts_blockeditor',
 			plugin_dir_url( __FILE__ ) . 'build/index.js',
-			array( 'wp-components', 'wp-edit-post', 'wp-i18n', 'wp-plugins' ),
+			array( 'wp-components', 'wp-edit-post', 'wp-element', 'wp-i18n', 'wp-plugins' ),
 			$this->asset_version
 		);
 		$args                 = $this->get_post_type_args();
