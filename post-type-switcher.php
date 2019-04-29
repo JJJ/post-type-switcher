@@ -81,15 +81,19 @@ final class Post_Type_Switcher {
 		}
 
 		// Add UI to "Publish" metabox
-		add_action( 'admin_head',                  array( $this, 'admin_head'        ) );
-		add_action( 'post_submitbox_misc_actions', array( $this, 'metabox'           ) );
-		add_action( 'quick_edit_custom_box',       array( $this, 'quick_edit'        ) );
-		add_action( 'bulk_edit_custom_box',        array( $this, 'quick_edit_bulk'   ) );
-		add_action( 'admin_enqueue_scripts',       array( $this, 'quick_edit_script' ) );
+		add_action( 'admin_head',                  array( $this, 'admin_head'          ) );
+		add_action( 'post_submitbox_misc_actions', array( $this, 'metabox'             ) );
+		add_action( 'quick_edit_custom_box',       array( $this, 'quick_edit'          ) );
+		add_action( 'bulk_edit_custom_box',        array( $this, 'quick_edit_bulk'     ) );
+		add_action( 'admin_enqueue_scripts',       array( $this, 'quick_edit_script'   ) );
+
+		// Add UI to the block editor
+		add_action( 'enqueue_block_editor_assets', array( $this, 'block_editor_assets' ) );
 
 		// Override
-		add_filter( 'wp_insert_attachment_data', array( $this, 'override_type' ), 10, 2 );
-		add_filter( 'wp_insert_post_data',       array( $this, 'override_type' ), 10, 2 );
+		add_action( 'wp_ajax_post_type_switcher', array( $this, 'handle_ajax' ) );
+		add_filter( 'wp_insert_attachment_data',  array( $this, 'override_type' ), 10, 2 );
+		add_filter( 'wp_insert_post_data',        array( $this, 'override_type' ), 10, 2 );
 
 		// Pass object into an action
 		do_action( 'post_type_switcher', $this );
@@ -250,6 +254,56 @@ final class Post_Type_Switcher {
 	}
 
 	/**
+	 * Enqueues modifications to the block editor.
+	 *
+	 * @since 3.2
+	 */
+	public function block_editor_assets() {
+
+		$current_post_type        = get_post_type();
+		$current_post_type_object = get_post_type_object( $current_post_type );
+		if ( ! current_user_can( $current_post_type_object->cap->publish_posts ) ) {
+			return;
+		}
+
+		wp_enqueue_script(
+			'pts_blockeditor',
+			plugin_dir_url( __FILE__ ) . 'build/index.js',
+			array( 'wp-components', 'wp-edit-post', 'wp-element', 'wp-i18n', 'wp-plugins' ),
+			$this->asset_version
+		);
+		$args                 = $this->get_post_type_args();
+		$available_post_types = array();
+		foreach ( get_post_types( $args, 'objects' ) as $post_type ) {
+			if ( ! current_user_can( $post_type->cap->publish_posts ) ) {
+				continue;
+			}
+			$available_post_types[] = array(
+				'value' => $post_type->name,
+				'label' => $post_type->labels->singular_name,
+			);
+		}
+		$change_url = add_query_arg(
+			array(
+				'action'           => 'post_type_switcher',
+				'pts-nonce-select' => wp_create_nonce( 'post-type-selector' ),
+				'post_id'          => get_the_ID(),
+			),
+			admin_url( 'admin-ajax.php' )
+		);
+		wp_localize_script(
+			'pts_blockeditor',
+			'ptsBlockEditor',
+			array(
+				'availablePostTypes'   => $available_post_types,
+				'currentPostType'      => $current_post_type,
+				'currentPostTypeLabel' => $current_post_type_object->labels->singular_name,
+				'changeUrl'            => $change_url,
+			)
+		);
+	}
+
+	/**
 	 * Output a post-type dropdown
 	 *
 	 * @since 1.2
@@ -300,6 +354,36 @@ final class Post_Type_Switcher {
 
 		// Output the current buffer
 		echo ob_get_clean();
+	}
+
+	/**
+	 * Handles an admin-ajax request to change post types.
+	 */
+	public function handle_ajax() {
+		if ( empty( $_GET['pts_post_type'] )
+			|| empty( $_GET['pts-nonce-select'] )
+			|| empty( $_GET['post_id'] ) ) {
+			return wp_die( __( 'Missing data.', 'pts' ) );
+		}
+
+		// Post type information
+		$post_id          = absint( $_GET['post_id'] );
+		$post_type        = sanitize_key( $_GET['pts_post_type'] );
+		$post_type_object = get_post_type_object( $post_type );
+
+		if ( ! current_user_can( $post_type_object->cap->publish_posts )
+			|| ! wp_verify_nonce( $_GET['pts-nonce-select'], 'post-type-selector' ) ) {
+			return wp_die( __( 'Sorry, you cannot do this.', 'pts' ) );
+		}
+
+		wp_update_post(
+			array(
+				'ID'        => $post_id,
+				'post_type' => $post_type,
+			)
+		);
+		wp_safe_redirect( get_edit_post_link( $post_id, 'raw' ) );
+		exit;
 	}
 
 	/**
@@ -477,7 +561,8 @@ final class Post_Type_Switcher {
 	private static function is_allowed_page() {
 
 		// Only for admin area
-		if ( is_blog_admin() || ( defined( 'DOING_AJAX' ) && DOING_AJAX && ( ! empty( $_REQUEST['action'] ) && ( 'inline-save' === $_REQUEST['action'] ) ) ) ) {
+		if ( is_blog_admin()
+			|| ( defined( 'DOING_AJAX' ) && DOING_AJAX && ( ! empty( $_REQUEST['action'] ) && ( in_array( $_REQUEST['action'], array( 'inline-save', 'post_type_switcher' ), true ) ) ) ) ) {
 
 			// Allowed admin pages
 			$pages = apply_filters( 'pts_allowed_pages', array(
