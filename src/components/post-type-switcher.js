@@ -4,7 +4,7 @@
 const { Button, Dropdown, PanelRow } = wp.components;
 const { PluginPostStatusInfo } = wp.editPost;
 const { Component } = wp.element;
-const { __ } = wp.i18n;
+const { sprintf, __ } = wp.i18n;
 
 class PostTypeSwitcherForm extends Component {
 	constructor( props ) {
@@ -27,10 +27,18 @@ class PostTypeSwitcherForm extends Component {
 							name={ `editor-post-visibility__setting` }
 							value={ value }
 							onChange={ () => {
+								const oldPostType = this.state.currentPostType;
 								this.setState({
 									currentPostType: value,
 								});
-								window.location.href = window.ptsBlockEditor.changeUrl + '&pts_post_type=' + value;
+								const message = sprintf( __( "Are you sure you want to change this from a '%s' to a '%s'?", 'pts' ), oldPostType, value );
+								if ( window.confirm( message ) ) {
+									window.location.href = window.ptsBlockEditor.changeUrl + '&pts_post_type=' + value;
+								} else {
+									this.setState({
+										currentPostType: oldPostType,
+									});
+								}
 							} }
 							checked={ value === this.state.currentPostType }
 							id={ `editor-post-type-switcher-${ value }` }
