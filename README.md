@@ -32,7 +32,7 @@ With block-editor (aka Gutenberg) support (thanks to Daniel Bachhuber) you can s
 
 ### Installation
 1. In your WordPress Dashboard go to "Plugins" -> "Add Plugin".
-2. Search for "Post Type Swticher".
+2. Search for "Post Type Switcher".
 3. Install the plugin by pressing the "Install" button.
 4. Activate the plugin by pressing the "Activate" button.
 5. From the post edit screen, above the "Publish" button is the "Post Type" interface.
@@ -55,6 +55,9 @@ You need to selectively change a posts type from one to another.
 
 ### Does this ruin my taxonomy associations?
 It should not. This plugin only changes the 'post_type' property of a post.
+
+### Does this ruin block-editor content?
+It should not. Be careful when editing HTML content while switching between editor types!
 
 ## Screenshots
 1. "Type" column in "Posts" screen.
