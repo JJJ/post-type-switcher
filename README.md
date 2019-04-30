@@ -8,18 +8,25 @@ This plugin adds a simple post type dropdown to the post editor interface, allow
 
 ### Supported Types
 
-The plugin can convert nearly every combination of posts, pages, attachments, and even custom post types:
+The plugin can convert nearly every combination of posts, pages, and even custom post types:
 
 * Page to Post
 * Post to Page
-* Page to Attachment
 * Post to Custom
 
-Invisible post types, such as revisions, menus, etc., are purposely excluded. But, if you need to access invisible post types, you can adjust the boundaries using the 'pts_post_type_filter' filter.
+Invisible post types, such as revisions, menus, etc., are purposely excluded. Attachments are also currently excluded, due to some bugs and conflicts.
+
+If you need to access invisible post types, you can adjust the boundaries using the `pts_post_type_filter` filter.
+
+If you are experiencing a conflict with a post-type from another plugin, please accept my apologies in adavnce, and open an issue including as much information as you can. Your content is very important to me, and I want to keep it safe.
 
 ### Bulk Editing
 
-With bulk editing, thanks to Matthew Gerring, you can select all the posts in a certain type and convert them to a new type with one quick action.
+With bulk editing (thanks to Matthew Gerring) you can select all the posts in a certain type and convert them to a new type with one quick action.
+
+### Block Editor
+
+With block-editor (aka Gutenberg) support (thanks to Daniel Bachhuber) you can switch between post-types that use either the Block Editor and the Classic one, without losing any of your embedded content.
 
 ## Installation
 
