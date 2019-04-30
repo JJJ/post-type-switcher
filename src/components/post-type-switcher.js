@@ -18,7 +18,7 @@ class PostTypeSwitcherForm extends Component {
 		return (
 			<fieldset key="post-type-switcher-selector" className="editor-post-visibility__dialog-fieldset">
 				<legend className="editor-post-visibility__dialog-legend">
-					{ __( 'Post Type Switcher', 'pts' ) }
+					{ __( 'Post Type Switcher', 'post-type-switcher' ) }
 				</legend>
 				{ window.ptsBlockEditor.availablePostTypes.map( ( { value, label } ) => (
 					<div key={ value } className="editor-post-visibility__choice">
