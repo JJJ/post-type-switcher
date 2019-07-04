@@ -2,8 +2,8 @@
 Contributors: johnjamesjacoby, beatpanda, norcross, stuttter
 Tags: post, page, type, types, post type
 Requires at least: 3.0
-Tested up to: 4.9
-Stable tag: 3.1.0
+Tested up to: 5.3
+Stable tag: 3.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=9Q4F4EL5YJ62J
@@ -29,7 +29,11 @@ Invisible post types, such as revisions, menus, etc., are purposely excluded. Bu
 
 = Bulk Editing =
 
-With bulk editing, thanks to Matthew Gerring, you can select all the posts in a certain type and convert them to a new type with one quick action.
+With bulk editing (thanks to Matthew Gerring) you can select all the posts in a certain type and convert them to a new type with one quick action.
+
+= Block Editor =
+
+With block-editor (aka Gutenberg) support (thanks to Daniel Bachhuber) you can switch between post-types that use either the Block Editor and the Classic one, without losing any of your embedded content.
 
 == Installation ==
 
@@ -65,6 +69,9 @@ It should not. This plugin only changes the 'post_type' property of a post.
 3. "Post Type" interface in "Edit Post" screen.
 
 == Changelog ==
+
+= 3.2.0 =
+* Block editor support 
 
 = 3.1.0 =
 * Fix post targeting when called recursively
