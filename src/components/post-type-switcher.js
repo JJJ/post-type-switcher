@@ -1,3 +1,5 @@
+/* global wp */
+
 /**
  * WordPress dependencies.
  */
@@ -24,6 +26,7 @@ class PostTypeSwitcherForm extends Component {
 					<div key={ value } className="editor-post-visibility__choice">
 						<input
 							type="radio"
+							className="editor-visibility__dialog-radio"
 							name={ `editor-post-visibility__setting` }
 							value={ value }
 							onChange={ () => {
@@ -42,7 +45,6 @@ class PostTypeSwitcherForm extends Component {
 							} }
 							checked={ value === this.state.currentPostType }
 							id={ `editor-post-type-switcher-${ value }` }
-							className="editor-visibility__dialog-radio"
 						/>
 						<label
 							htmlFor={ `editor-post-type-switcher-${ value }` }
