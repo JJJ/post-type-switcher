@@ -1,8 +1,8 @@
 === Post Type Switcher ===
 Contributors: johnjamesjacoby, beatpanda, norcross, stuttter
 Tags: post, page, type, types, post type
-Requires at least: 3.0
-Tested up to: 5.3
+Requires at least: 5.0
+Tested up to: 5.8
 Stable tag: 3.2.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -46,14 +46,14 @@ With block-editor (aka Gutenberg) support (thanks to Daniel Bachhuber) you can s
 6. Change post types as needed.
 
 = Minimum Requirements =
-* WordPress version 3.0 or greater.
-* PHP version 5.2.4 or greater.
-* MySQL version 5.0 or greater.
+* WordPress version 5.0 or greater.
+* PHP version 7.0.0 or greater.
+* MySQL version 5.7 or greater.
 
 = Recommended Requirements =
 * Latest WordPress version.
-* PHP version 7.0 or greater.
-* MySQL version 5.7 or greater, or MariaDB 10 or greater.
+* PHP version 8.0 or greater.
+* MySQL version 8.0 or greater, or MariaDB 10.5 or greater.
 
 == Frequently Asked Questions ==
 
@@ -63,6 +63,18 @@ You need to selectively change a posts type from one to another.
 = Does this ruin my taxonomy associations? =
 It should not. This plugin only changes the 'post_type' property of a post.
 
+= Does this ruin block-editor content? =
+It should not. Be careful when editing HTML content while switching between editor types!
+
+= Will this delete my content? =
+No. This plugin does not include any code capable of deleting anything.
+
+Plugin conflicts are not unheard of and can be difficult to troubleshoot.
+
+If you're worried, backup your database and deactivate all other plugins before using this tool.
+
+If you're still worried, ask for help in the WordPress.org support forums.
+
 == Screenshots ==
 1. "Type" column in "Posts" screen.
 2. "Post Type" interface in "Quick Edit".
@@ -71,7 +83,7 @@ It should not. This plugin only changes the 'post_type' property of a post.
 == Changelog ==
 
 = 3.2.0 =
-* Block editor support 
+* Block editor support
 
 = 3.1.0 =
 * Fix post targeting when called recursively
