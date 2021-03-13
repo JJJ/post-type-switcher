@@ -8,16 +8,18 @@
  */
 
 /**
- * Plugin Name: Post Type Switcher
- * Plugin URI:  https://wordpress.org/plugins/post-type-switcher/
- * Author:      John James Jacoby
- * Author URI:  https://profiles.wordpress.org/johnjamesjacoby/
- * License:     GPLv2 or later
- * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Description: Allow switching of a post type while editing a post (in post publish section)
- * Version:     3.2.0
- * Text Domain: post-type-switcher
- * Domain Path: /assets/lang/
+ * Plugin Name:       Post Type Switcher
+ * Plugin URI:        https://wordpress.org/plugins/post-type-switcher
+ * Description:       A simple way to change a post's type in WordPress
+ * Author:            John James Jacoby
+ * Author URI:        https://jjj.blog
+ * License:           GNU General Public License v2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       post-type-switcher
+ * Domain Path:       /assets/lang/
+ * Requires PHP:      7.0.0
+ * Requires at least: 5.0
+ * Version:           3.2.0
  */
 
 // Exit if accessed directly
