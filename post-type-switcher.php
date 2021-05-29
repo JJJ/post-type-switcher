@@ -9,17 +9,18 @@
 
 /**
  * Plugin Name:       Post Type Switcher
- * Plugin URI:        https://wordpress.org/plugins/post-type-switcher
  * Description:       A simple way to change a post's type in WordPress
- * Author:            John James Jacoby
- * Author URI:        https://jjj.blog
+ * Plugin URI:        https://wordpress.org/plugins/post-type-switcher
+ * Author:            Triple J Software, Inc.
+ * Author URI:        https://jjj.software
  * License:           GNU General Public License v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       post-type-switcher
  * Domain Path:       /assets/lang/
- * Requires PHP:      7.0.0
  * Requires at least: 5.0
- * Version:           3.2.0
+ * Requires PHP:      7.0
+ * Tested up to:      5.8
+ * Version:           3.2.1
  */
 
 // Exit if accessed directly
@@ -39,7 +40,7 @@ final class Post_Type_Switcher {
 	 *
 	 * @var int
 	 */
-	private $asset_version = 201904300001;
+	private $asset_version = 202105290001;
 
 	/**
 	 * Hook in the basic early actions
@@ -68,6 +69,16 @@ final class Post_Type_Switcher {
 	 * @return void
 	 */
 	public function admin_init() {
+
+		// Sponsor
+		if ( ! defined( 'JJJ_NO_SPONSOR' ) ) {
+
+			// Get basename
+			$basename = plugin_basename( __FILE__ );
+
+			add_filter( "plugin_action_links_{$basename}",               array( $this, 'filter_plugin_action_links' ), 20 );
+			add_filter( "network_admin_plugin_action_links_{$basename}", array( $this, 'filter_plugin_action_links' ), 20 );
+		}
 
 		// Bail if page not allowed
 		if ( ! $this->is_allowed_page() ) {
@@ -665,6 +676,27 @@ final class Post_Type_Switcher {
 		return (array) apply_filters( 'pts_post_type_filter', array(
 			'public'  => true,
 			'show_ui' => true
+		) );
+	}
+
+	/**
+	 * Filter plugin action links, and add a sponsorship link.
+	 *
+	 * @since 3.2.1
+	 * @param array $actions
+	 * @return array
+	 */
+	public function filter_plugin_action_links( $actions = array() ) {
+
+		// Sponsor text
+		$text = esc_html_x( 'Sponsor', 'verb', 'post-type-switcher' );
+
+		// Sponsor URL
+		$url  = 'https://buy.stripe.com/7sI3cd2tK1Cy2lydQR';
+
+		// Merge links & return
+		return array_merge( $actions, array(
+			'sponsor' => '<a href="' . esc_url( $url ) . '">' . esc_html( $text ) . '</a>'
 		) );
 	}
 }
