@@ -424,8 +424,20 @@ final class Post_Type_Switcher {
 			return wp_die( esc_html__( 'Sorry, you cannot do this.', 'post-type-switcher' ) );
 		}
 
+		// Retrieve the original post type for later use
+		$original_post_type = get_post_type( $post_id );
+
 		// Update the post type
 		set_post_type( $post_id, $post_type );
+
+		/**
+		 * Allow actions after post type switch
+		 * 
+		 * @param $updated_post_type string The new post type
+		 * @param $post_type The old post type
+		 * @param $post_id The post ID
+		 */
+		do_action( 'post_type_after_switch', $post_type, $original_post_type, $post_id );
 
 		// Redirect
 		wp_safe_redirect( get_edit_post_link( $post_id, 'raw' ) );
@@ -519,6 +531,15 @@ final class Post_Type_Switcher {
 
 		// Update post type
 		$data['post_type'] = $post_type;
+
+		/**
+		 * Allow actions after post type switch
+		 * 
+		 * @param $updated_post_type string The new post type
+		 * @param $post_type The old post type
+		 * @param $post_id The post ID
+		 */
+		do_action( 'post_type_after_switch', $post_type, $postarr['post_type'], $postarr['ID'] );
 
 		// Return modified post data
 		return $data;
