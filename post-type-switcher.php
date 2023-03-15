@@ -38,9 +38,9 @@ final class Post_Type_Switcher {
 	 *
 	 * @since 3.0.1
 	 *
-	 * @var int
+	 * @var string
 	 */
-	private $asset_version = 202105290001;
+	private $asset_version = '202105290001';
 
 	/**
 	 * Hook in the basic early actions
@@ -128,7 +128,7 @@ final class Post_Type_Switcher {
 		$cpt_object = get_post_type_object( $post_type );
 
 		// Bail if object does not exist or produces an error
-		if ( empty( $cpt_object ) || is_wp_error( $cpt_object ) ) {
+		if ( ! $cpt_object instanceof \WP_Post_Type ) {
 			return;
 		}
 
@@ -380,7 +380,7 @@ final class Post_Type_Switcher {
 
 				// Only select if not bulk
 				if ( false === $bulk ) :
-					$selected = selected( $post_type, $_post_type );
+					$selected = selected( $post_type, $_post_type, false );
 				endif;
 
 				// Output option
@@ -451,7 +451,7 @@ final class Post_Type_Switcher {
 	 * @param  array  $data
 	 * @param  array  $postarr
 	 *
-	 * @return Maybe modified $data
+	 * @return array Maybe modified $data
 	 */
 	public function override_type( $data = array(), $postarr = array() ) {
 
@@ -529,7 +529,7 @@ final class Post_Type_Switcher {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return If on post-new.php
+	 * @return void If on post-new.php
 	 */
 	public function admin_head() {
 	?>
