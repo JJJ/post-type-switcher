@@ -111,6 +111,9 @@ final class Post_Type_Switcher {
 		add_filter( 'wp_insert_attachment_data',  array( $this, 'override_type' ), 10, 2 );
 		add_filter( 'wp_insert_post_data',        array( $this, 'override_type' ), 10, 2 );
 
+		// Compatibility
+		add_action( 'post_type_after_switch',	  array( $this, 'wpml_sync_type' ), 10, 3 );
+
 		// Pass object into an action
 		do_action( 'post_type_switcher', $this );
 	}
@@ -424,8 +427,20 @@ final class Post_Type_Switcher {
 			return wp_die( esc_html__( 'Sorry, you cannot do this.', 'post-type-switcher' ) );
 		}
 
+		// Retrieve the original post type for later use
+		$original_post_type = get_post_type( $post_id );
+
 		// Update the post type
 		set_post_type( $post_id, $post_type );
+
+		/**
+		 * Allow actions after post type switch
+		 * 
+		 * @param $updated_post_type string The new post type
+		 * @param $post_type The old post type
+		 * @param $post_id The post ID
+		 */
+		do_action( 'post_type_after_switch', $post_type, $original_post_type, $post_id );
 
 		// Redirect
 		wp_safe_redirect( get_edit_post_link( $post_id, 'raw' ) );
@@ -520,8 +535,59 @@ final class Post_Type_Switcher {
 		// Update post type
 		$data['post_type'] = $post_type;
 
+		/**
+		 * Allow actions after post type switch
+		 * 
+		 * @param $updated_post_type string The new post type
+		 * @param $post_type The old post type
+		 * @param $post_id The post ID
+		 */
+		do_action( 'post_type_after_switch', $post_type, $postarr['post_type'], $postarr['ID'] );
+
 		// Return modified post data
 		return $data;
+	}
+
+	/**
+	 * Switch post translations via WPML
+	 * 
+	 * @param $post_type string The new post type
+	 * @param $original_post_type The old post type
+	 * @param $post_id The post ID
+	 * 
+	 * @return void
+	 */
+	public function wpml_sync_type( $post_type, $original_post_type, $post_id ) {
+		global $wpdb, $sitepress;
+
+		if ( is_a( $sitepress, '\SitePress' ) ) {
+			// Retrieve the translation grouping ID
+			// Used to select and update sibling translations
+			$trid = $wpdb->get_var( $wpdb->prepare( "
+				SELECT 	trid
+				FROM 	{$wpdb->prefix}icl_translations
+				WHERE 	element_id = %d
+			", $post_id ) );
+
+			// Update translation grouping element types
+			$wpdb->update( 
+				$wpdb->prefix . 'icl_translations', 
+				array( 'element_type' => 'post_' . sanitize_key( $post_type ) ),
+				array( 'trid'		  => $trid )
+			);
+
+			// Retrieve other posts that are sibling translations
+			$translation_items = $wpdb->get_col( $wpdb->prepare( "
+				SELECT 	element_id
+				FROM 	{$wpdb->prefix}icl_translations
+				WHERE 	trid = %d
+			", $trid ) );
+
+			// Update post type of sibling translations
+			foreach ( $translation_items as $_post_id ) {
+				set_post_type( $_post_id, sanitize_key( $post_type ) );
+			}
+		}
 	}
 
 	/**
