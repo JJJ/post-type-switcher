@@ -96,6 +96,9 @@ final class Post_Type_Switcher {
 			}
 		}
 
+		// Default to "post_type" column being hidden
+		add_filter( 'default_hidden_columns', array( $this, 'default_hidden_columns' ) );
+
 		// Add UI to "Publish" metabox
 		add_action( 'admin_head',                  array( $this, 'admin_head'          ) );
 		add_action( 'post_submitbox_misc_actions', array( $this, 'metabox'             ) );
@@ -181,9 +184,44 @@ final class Post_Type_Switcher {
 	 * @since 1.2.0
 	 *
 	 * @param array $columns Array of registered columns
+	 *
+	 * @return array
 	 */
 	public function add_column( $columns = array() ) {
-		return array_merge( $columns, array( 'post_type' => esc_html__( 'Type', 'post-type-switcher' ) ) );
+
+		// Ensure columns is an array
+		if ( empty( $columns ) || ! is_array( $columns ) ) {
+			$columns = array();
+		}
+
+		// Define new column
+		$new_column = array( 'post_type' => esc_html__( 'Type', 'post-type-switcher' ) );
+
+		// Merge new column with existing columns
+		return array_merge( $columns, $new_column );
+	}
+
+	/**
+	 * Adds "post_type" column to array of hidden columns by default
+	 *
+	 * @since 3.1.0
+	 *
+	 * @param array $hidden Array of hidden columns
+	 *
+	 * @return array
+	 */
+	public function default_hidden_columns( $hidden = array() ) {
+
+		// Ensure hidden is an array
+		if ( empty( $hidden ) || ! is_array( $hidden ) ) {
+			$hidden = array();
+		}
+
+		// Add "post_type" to hidden columns
+		$hidden[] = 'post_type';
+
+		// Return hidden columns
+		return $hidden;
 	}
 
 	/**
