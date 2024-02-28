@@ -18,9 +18,9 @@
  * Text Domain:       post-type-switcher
  * Domain Path:       /assets/lang/
  * Requires at least: 5.0
- * Requires PHP:      7.0
- * Tested up to:      5.8
- * Version:           3.2.1
+ * Requires PHP:      8.0
+ * Tested up to:      6.5
+ * Version:           3.3.0
  */
 
 // Exit if accessed directly
