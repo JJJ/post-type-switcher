@@ -2,7 +2,7 @@
 /**
  * Post Type Switcher
  *
- * Allow switching of a post type while editing a post (in post publish section)
+ * A simple way to change a post's type in WordPress
  *
  * @package Plugins/Admin/Post/TypeSwitcher
  */
@@ -10,7 +10,7 @@
 /**
  * Plugin Name:       Post Type Switcher
  * Description:       A simple way to change a post's type in WordPress
- * Plugin URI:        https://wordpress.org/plugins/post-type-switcher
+ * Plugin URI:        https://wordpress.org/plugins/post-type-switcher/
  * Author:            Triple J Software, Inc.
  * Author URI:        https://jjj.software
  * License:           GNU General Public License v2 or later
@@ -40,7 +40,7 @@ final class Post_Type_Switcher {
 	 *
 	 * @var string
 	 */
-	private $asset_version = '202105290001';
+	private $asset_version = '202302290001';
 
 	/**
 	 * Hook in the basic early actions
@@ -695,6 +695,50 @@ final class Post_Type_Switcher {
 			}
 			.wp-list-table .column-post_type {
 				width: 10%;
+			}
+			.edit-post-post-type {
+				align-items: flex-start;
+				justify-content: flex-start;
+				width: 100%;
+			}
+			.edit-post-post-type span {
+				display: inline-block;
+				flex-shrink: 0;
+				padding: 6px 0;
+				width: 45%;
+			}
+			.components-button.edit-post-post-type__toggle {
+				height: auto;
+				text-align: left;
+				white-space: normal;
+				word-break: break-word;
+			}
+			.editor-post-type__dialog-fieldset {
+				margin: 8px;
+				min-width: 248px;
+			}
+			.editor-post-type__dialog-fieldset .editor-post-type__dialog-legend {
+				line-height: 1.2;
+				margin-top: 0px;
+				margin-bottom: 16px;
+				color: rgb(30, 30, 30);
+				font-size: calc(13px);
+				font-weight: 600;
+				display: block;
+			}
+			.editor-post-type__dialog-fieldset .editor-post-type__choice {
+				margin: 8px;
+				display: block;
+			}
+			.editor-post-type__dialog-fieldset .editor-post-type__choice:last-child {
+				margin-bottom: 0;
+			}
+			.editor-post-type__dialog-fieldset .editor-post-type__dialog-radio[type=radio] {
+				display: inline-block;
+			}
+			.editor-post-type__dialog-fieldset .editor-post-type__dialog-label {
+				margin: -3px 0 0 8px;
+				display: inline-block;
 			}
 		</style>
 
