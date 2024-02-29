@@ -681,7 +681,7 @@ final class Post_Type_Switcher {
 			#post-body .post-type-switcher::before {
 				content: '\f109';
 				font: 400 20px/1 dashicons;
-				speak: none;
+				speak: never;
 				display: inline-block;
 				padding: 0 2px 0 0;
 				top: 0;
