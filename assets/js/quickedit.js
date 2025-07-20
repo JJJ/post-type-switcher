@@ -31,7 +31,7 @@ function pts_quick_edit() {
 			// edit_row is the quick-edit row, containing the inputs that need to be updated
 			edit_row   = $( '#edit-' + id ),
 
-			// post_row is the row shown when a book isn't being edited, which also holds the existing values.
+			// post_row is the row shown when a post isn't being edited, which also holds the existing values.
 			post_row   = $( '#post-' + id ),
 
 			// get the existing values
