@@ -7,10 +7,10 @@ License URI:       https://www.gnu.org/licenses/gpl-2.0.html
 License:           GPLv2 or later
 Contributors:      johnjamesjacoby, beatpanda, norcross
 Tags:              post, page, type, types, post type
-Requires PHP:      7.0
-Requires at least: 5.0
-Tested up to:      6.5
-Stable tag:        3.3.1
+Requires PHP:      8.0
+Requires at least: 6.2
+Tested up to:      6.9
+Stable tag:        4.0.0
 
 A simple way to change a post's type in WordPress
 

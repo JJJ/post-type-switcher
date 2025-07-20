@@ -17,10 +17,10 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       post-type-switcher
  * Domain Path:       /assets/lang/
- * Requires at least: 5.0
- * Requires PHP:      7.0
- * Tested up to:      6.5
- * Version:           3.3.1
+ * Requires at least: 6.2
+ * Requires PHP:      8.0
+ * Tested up to:      6.9
+ * Version:           4.0.0
  */
 
 // Exit if accessed directly
@@ -40,7 +40,7 @@ final class Post_Type_Switcher {
 	 *
 	 * @var string
 	 */
-	private $asset_version = '202302290001';
+	private $asset_version = '202507200015';
 
 	/**
 	 * Hook in the basic early actions
@@ -697,8 +697,14 @@ final class Post_Type_Switcher {
 				width: 10%;
 			}
 			.edit-post-post-type {
-				align-items: flex-start;
-				justify-content: flex-start;
+				display: flex;
+				-webkit-box-align: center;
+				align-items: center;
+				flex-direction: row;
+				gap: calc(8px);
+				-webkit-box-pack: justify;
+				justify-content: space-between;
+				margin-top: -8px;
 				width: 100%;
 			}
 			.edit-post-post-type span {
@@ -763,7 +769,7 @@ final class Post_Type_Switcher {
 
 			// AJAX with correct action value
 			(
-				defined( 'DOING_AJAX' ) && DOING_AJAX
+				wp_doing_ajax()
 				&&
 				(
 					! empty( $_REQUEST['action'] )
@@ -775,7 +781,12 @@ final class Post_Type_Switcher {
 			)
 		) {
 
-			// Allowed admin pages
+			/**
+			 * Allowed admin page file names.
+			 *
+			 * @since 1.0.0
+			 * @param array Array of page file names
+			 */
 			$pages = apply_filters( 'pts_allowed_pages', array(
 				'post.php',
 				'edit.php',
@@ -795,7 +806,8 @@ final class Post_Type_Switcher {
 	 *
 	 * @since 3.2.0
 	 *
-	 * @param string $output objects|names
+	 * @param string $output Optional. The type of output to return. Accepts
+	 *                       post type 'names' or 'objects'. Default 'objects'.
 	 * @return array
 	 */
 	private function get_post_types( $output = 'objects' ) {
@@ -808,8 +820,16 @@ final class Post_Type_Switcher {
 			unset( $types['attachment'] );
 		}
 
-		// Return switchable types
-		return $types;
+		/**
+		 * Filter the post types (usually objects).
+		 *
+		 * @since 4.0.0
+		 *
+		 * @param  array  $types Array of post types (usually objects)
+		 * @param  string $output The type of output that $types is
+		 * @return array
+		 */
+		return (array) apply_filters( 'pts_get_post_types_filter', $types, $output );
 	}
 
 	/**
@@ -821,10 +841,22 @@ final class Post_Type_Switcher {
 	 * @return array
 	 */
 	private function get_post_type_args() {
-		return (array) apply_filters( 'pts_post_type_filter', array(
+
+		// Default arguments
+		$args = array(
 			'public'  => true,
 			'show_ui' => true
-		) );
+		);
+
+		/**
+		 * Filter the arguments that get passed into `get_post_types()`.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param  array $args Array of arguments
+		 * @return array
+		 */
+		return (array) apply_filters( 'pts_post_type_filter', $args );
 	}
 
 	/**

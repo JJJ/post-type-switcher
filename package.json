@@ -1,6 +1,6 @@
 {
   "name": "post-type-switcher",
-  "version": "0.0.0",
+  "version": "4.0.0",
   "description": "The simplest way to change a post's type in WordPress",
   "repository": {
     "type": "git",
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "start": "wp-scripts start",
-    "build": "wp-scripts build"
+    "build": "wp-scripts build && node ./src/move-build.js"
   },
   "license": "GPL-2.0+",
   "bugs": {

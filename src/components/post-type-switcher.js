@@ -4,7 +4,7 @@
  * WordPress dependencies.
  */
 const { Button, Dropdown, PanelRow } = wp.components;
-const { PluginPostStatusInfo } = wp.editPost;
+const { PluginPostStatusInfo } = wp.editor;
 const { Component } = wp.element;
 const { sprintf, __ } = wp.i18n;
 
@@ -89,22 +89,25 @@ const PostTypeSwitcher = () => {
 	return(
 		<PluginPostStatusInfo>
 			<div className="edit-post-post-type">
-				<span>{ __( 'Post Type', 'post-type-switcher' ) }</span>
-				<Dropdown
-					position="bottom left"
-					contentClassName="edit-post-post-type__dialog"
-					renderToggle={ ( { isOpen, onToggle } ) => (
-						<Button
-							type="button"
-							aria-expanded={ isOpen }
-							className="edit-post-post-type__toggle is-tertiary"
-							onClick={ onToggle }
-						>
-							{window.ptsBlockEditor.currentPostTypeLabel}
-						</Button>
-					) }
-					renderContent={ () => <PostTypeSwitcherForm /> }
-				/>
+				<div className="editor-post-panel__row-label">{ __( 'Post Type', 'post-type-switcher' ) }</div>
+				<div className="editor-post-panel__row-control">
+					<Dropdown
+						popoverProps={ { placement: 'left-start', offset: 138, shift: true } }
+						contentClassName="edit-post-post-type__dialog"
+						renderToggle={ ( { isOpen, onToggle } ) => (
+							<Button
+								type="button"
+								aria-expanded={ isOpen }
+								aria-label={ sprintf( __( 'Change post type: %s', 'post-type-switcher' ), window.ptsBlockEditor.currentPostType ) }
+								className="edit-post-post-type__toggle is-compact is-tertiary"
+								onClick={ onToggle }
+							>
+								{window.ptsBlockEditor.currentPostTypeLabel}
+							</Button>
+						) }
+						renderContent={ () => <PostTypeSwitcherForm /> }
+					/>
+				</div>
 			</div>
 		</PluginPostStatusInfo>
 	);
