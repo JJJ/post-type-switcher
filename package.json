@@ -16,6 +16,6 @@
   },
   "homepage": "https://github.com/jjj/post-type-switcher#readme",
   "devDependencies": {
-    "@wordpress/scripts": "^26.19.0"
+    "@wordpress/scripts": "^30.19.0"
   }
 }
