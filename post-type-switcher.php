@@ -48,21 +48,26 @@ final class Post_Type_Switcher {
 	 * @since 1.1.0
 	 */
 	public function __construct() {
-		add_action( 'plugins_loaded', array( $this, 'load_textdomain' ) );
-		add_action( 'admin_init',     array( $this, 'admin_init'      ) );
+		add_action( 'init', array( $this, 'init' ) );
 	}
 
 	/**
-	 * Load the plugin text domain for translation strings
+	 * Initialization
 	 *
-	 * @since 1.6.0
+	 * @since 4.0.0
 	 */
-	public function load_textdomain() {
+	public function init() {
+
+		// Load the plugin textdomain
 		load_plugin_textdomain( 'post-type-switcher' );
+
+		// Initialize admin
+		add_action( 'admin_init', array( $this, 'admin_init' ) );
+		add_action( 'admin_init', array( $this, 'admin_done' ) );
 	}
 
 	/**
-	 * Setup admin actions
+	 * Admin initialization
 	 *
 	 * @since 1.7.0
 	 *
@@ -100,24 +105,43 @@ final class Post_Type_Switcher {
 		add_filter( 'default_hidden_columns', array( $this, 'default_hidden_columns' ) );
 
 		// Add UI to "Publish" metabox
-		add_action( 'admin_head',                  array( $this, 'admin_head'          ) );
-		add_action( 'post_submitbox_misc_actions', array( $this, 'metabox'             ) );
-		add_action( 'quick_edit_custom_box',       array( $this, 'quick_edit'          ) );
-		add_action( 'bulk_edit_custom_box',        array( $this, 'quick_edit_bulk'     ) );
-		add_action( 'admin_enqueue_scripts',       array( $this, 'quick_edit_script'   ) );
+		add_action( 'admin_head',                  array( $this, 'admin_head'        ) );
+		add_action( 'post_submitbox_misc_actions', array( $this, 'metabox'           ) );
+		add_action( 'quick_edit_custom_box',       array( $this, 'quick_edit'        ) );
+		add_action( 'bulk_edit_custom_box',        array( $this, 'quick_edit_bulk'   ) );
+		add_action( 'admin_enqueue_scripts',       array( $this, 'quick_edit_script' ) );
 
 		// Add UI to the block editor
 		add_action( 'enqueue_block_editor_assets', array( $this, 'block_editor_assets' ) );
 
-		// Override
+		// AJAX handler
 		add_action( 'wp_ajax_post_type_switcher', array( $this, 'handle_ajax' ) );
-		add_filter( 'wp_insert_attachment_data',  array( $this, 'override_type' ), 10, 2 );
-		add_filter( 'wp_insert_post_data',        array( $this, 'override_type' ), 10, 2 );
+
+		// Maybe override type on admin-area inserts, when requested
+		add_filter( 'wp_insert_attachment_data', array( $this, 'override_type' ), 10, 2 );
+		add_filter( 'wp_insert_post_data',       array( $this, 'override_type' ), 10, 2 );
 
 		// Compatibility
-		add_action( 'post_type_after_switch',	  array( $this, 'wpml_sync_type' ), 10, 3 );
+		add_action( 'post_type_after_switch', array( $this, 'wpml_sync_type' ), 10, 3 );
+	}
 
-		// Pass object into an action
+	/**
+	 * Admin initialized
+	 *
+	 * @since 4.0.0
+	 */
+	public function admin_done() {
+
+		/**
+		 * Admin initialization complete
+		 *
+		 * Use this action to unhook parts of this plugin if necessary
+		 *
+		 * @since 2.0.0
+		 * @since 4.0.0 Now fires on all admin requests (not just allowed pages)
+		 *
+		 * @param Post_Type_Switcher $this Self
+		 */
 		do_action( 'post_type_switcher', $this );
 	}
 
@@ -469,11 +493,13 @@ final class Post_Type_Switcher {
 		$original_post_type = get_post_type( $post_id );
 
 		// Update the post type
-		set_post_type( $post_id, $post_type );
+		$this->set_post_type( $post_id, $post_type );
 
 		/**
 		 * Allow actions after post type switch
-		 * 
+		 *
+		 * @since 1.0.0
+		 *
 		 * @param $updated_post_type string The new post type
 		 * @param $post_type The old post type
 		 * @param $post_id The post ID
@@ -575,7 +601,9 @@ final class Post_Type_Switcher {
 
 		/**
 		 * Allow actions after post type switch
-		 * 
+		 *
+		 * @since 3.0.0
+		 *
 		 * @param $updated_post_type string The new post type
 		 * @param $post_type The old post type
 		 * @param $post_id The post ID
@@ -588,17 +616,21 @@ final class Post_Type_Switcher {
 
 	/**
 	 * Switch post translations via WPML
-	 * 
+	 *
 	 * @param $post_type string The new post type
 	 * @param $original_post_type The old post type
 	 * @param $post_id The post ID
-	 * 
+	 *
 	 * @return void
 	 */
 	public function wpml_sync_type( $post_type, $original_post_type, $post_id ) {
 		global $wpdb, $sitepress;
 
 		if ( is_a( $sitepress, '\SitePress' ) ) {
+
+			// Sanitize the post type
+			$post_type = sanitize_key( $post_type );
+
 			// Retrieve the translation grouping ID
 			// Used to select and update sibling translations
 			$trid = $wpdb->get_var( $wpdb->prepare( "
@@ -608,9 +640,9 @@ final class Post_Type_Switcher {
 			", $post_id ) );
 
 			// Update translation grouping element types
-			$wpdb->update( 
-				$wpdb->prefix . 'icl_translations', 
-				array( 'element_type' => 'post_' . sanitize_key( $post_type ) ),
+			$wpdb->update(
+				$wpdb->prefix . 'icl_translations',
+				array( 'element_type' => 'post_' . $post_type ),
 				array( 'trid'		  => $trid )
 			);
 
@@ -621,9 +653,14 @@ final class Post_Type_Switcher {
 				WHERE 	trid = %d
 			", $trid ) );
 
+			// Bail if no translation items
+			if ( empty( $translation_items ) || ! is_array( $translation_items ) ) {
+				return;
+			}
+
 			// Update post type of sibling translations
 			foreach ( $translation_items as $_post_id ) {
-				set_post_type( $_post_id, sanitize_key( $post_type ) );
+				$this->set_post_type( $_post_id, $post_type );
 			}
 		}
 	}
@@ -799,6 +836,56 @@ final class Post_Type_Switcher {
 
 		// Default to false
 		return false;
+	}
+
+	/**
+	 * Set the `post_type` for a given ID.
+	 *
+	 * Also stashes the most-previous type in meta.
+	 *
+	 * @since 4.0.0
+	 *
+	 * @param int    $post_id   ID of post.
+	 * @param string $post_type Type for post.
+	 *
+	 * @return
+	 */
+	private function set_post_type( $post_id = 0, $post_type = '' ) {
+
+		// Get the current/previous post_type
+		$current  = get_post_type( $post_id );
+
+		// Try to get original & previous
+		$original = get_post_meta( $post_id, 'pts_original_type', true );
+		$previous = get_post_meta( $post_id, 'pts_previous_type', true );
+
+		// Try to set the post type
+		$retval   = set_post_type( $post_id, $post_type );
+
+		// Maybe stash the current/previous in meta
+		if ( ! empty( $retval ) ) {
+
+			// Only add the original type once
+			if ( empty( $original ) ) {
+				add_post_meta( $post_id, 'pts_original_type', $current );
+
+			// Only delete original meta after revert
+			} elseif ( $post_type === $original ) {
+				delete_post_meta( $post_id, 'pts_original_type' );
+			}
+
+			// Update the previous meta key
+			if ( $post_type !== $previous ) {
+				update_post_meta( $post_id, 'pts_previous_type', $current );
+
+			// Only delete previous meta after revert
+			} else {
+				delete_post_meta( $post_id, 'pts_previous_type' );
+			}
+		}
+
+		// Return (number of updated rows, 1 or 0)
+		return $retval;
 	}
 
 	/**
