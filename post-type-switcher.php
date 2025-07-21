@@ -848,7 +848,7 @@ final class Post_Type_Switcher {
 	 * @param int    $post_id   ID of post.
 	 * @param string $post_type Type for post.
 	 *
-	 * @return
+	 * @return int Number of updated rows (1, or 0)
 	 */
 	private function set_post_type( $post_id = 0, $post_type = '' ) {
 
