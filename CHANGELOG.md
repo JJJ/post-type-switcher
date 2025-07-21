@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.0.0
+* Requires WordPress 6.2
+* Requires PHP 8.0
+* Improve block editor styling
+* Stash original & previous types in post meta
+* Add `pts_get_post_types_filter` filter
+* Load textdomain on `init` instead of `plugins_loaded`
+
 ## 3.2.0
 * Block editor support
 
