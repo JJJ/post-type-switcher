@@ -483,10 +483,16 @@ final class Post_Type_Switcher {
 		$post_type        = sanitize_key( $_GET['pts_post_type'] );
 		$post_type_object = get_post_type_object( $post_type );
 
-		// Bail if user isn't capable or nonce fails
-		if ( ! current_user_can( $post_type_object->cap->publish_posts )
-			|| ! wp_verify_nonce( $_GET['pts-nonce-select'], 'post-type-selector' ) ) {
-			return wp_die( esc_html__( 'Sorry, you cannot do this.', 'post-type-switcher' ) );
+		// Bail if nonce is invalid, or user cannot edit or publish
+		if (
+			! wp_verify_nonce( $_GET['pts-nonce-select'], 'post-type-selector' )
+			||
+			! current_user_can( 'edit_post', $post_id )
+			||
+			! current_user_can( $post_type_object->cap->publish_posts )
+		) {
+			wp_die( esc_html__( 'Sorry, you are not allowed to edit this post.', 'post-type-switcher' ) );
+			return;
 		}
 
 		// Retrieve the original post type for later use
