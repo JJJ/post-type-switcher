@@ -10,7 +10,7 @@ Tags:              post, page, type, types, post type
 Requires PHP:      8.0
 Requires at least: 6.2
 Tested up to:      6.9
-Stable tag:        4.0.0
+Stable tag:        4.0.1
 
 A simple way to change a post's type in WordPress
 
@@ -85,6 +85,9 @@ If you're still worried, ask for help in the WordPress.org support forums.
 3. "Post Type" interface in "Edit Post" screen.
 
 == Changelog ==
+
+= 4.0.1 =
+* Prevent Authors & Contributors from changing types on posts of Editors & Admins
 
 = 4.0.0 =
 * Requires WordPress 6.2

@@ -20,7 +20,7 @@
  * Requires at least: 6.2
  * Requires PHP:      8.0
  * Tested up to:      6.9
- * Version:           4.0.0
+ * Version:           4.0.1
  */
 
 // Exit if accessed directly

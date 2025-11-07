@@ -1,6 +1,6 @@
 {
   "name": "post-type-switcher",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "The simplest way to change a post's type in WordPress",
   "repository": {
     "type": "git",

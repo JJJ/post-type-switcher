@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.0.1
+* Prevent Authors & Contributors from changing types on posts of Editors & Admins
+
 ## 4.0.0
 * Requires WordPress 6.2
 * Requires PHP 8.0
