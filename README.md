@@ -4,7 +4,7 @@ The simplest way to change a post's type in WordPress
 
 ## Description
 
-This plugin adds a simple post type dropdown to the post editor interface, allowing you to reassign any post to a new post type. It allows you to switch post's type while editing your post.
+This plugin adds a simple post type dropdown to the post editor interface, allowing you to reassign any post to a new post type. It allows you to switch a post's type while editing your post.
 
 ### Supported Types
 
@@ -13,12 +13,11 @@ The plugin can convert nearly every combination of posts, pages, and even custom
 * Page to Post
 * Post to Page
 * Post to Custom
+* Custom to Custom
 
-Invisible post types, such as revisions, menus, etc., are purposely excluded. Attachments are also currently excluded, due to some bugs and conflicts.
+As of 3.0.0, support for switching to or from attachments was removed. This may come back in a subsequent version.
 
-If you need to access invisible post types, you can adjust the boundaries using the `pts_post_type_filter` filter.
-
-If you are experiencing a conflict with a post-type from another plugin, please accept my apologies in adavnce, and open an issue including as much information as you can. Your content is very important to me, and I want to keep it safe.
+Invisible post types, such as revisions and menus, are purposely excluded. If you need to access invisible post types, you can adjust the boundaries using the `pts_post_type_filter` filter.
 
 ### Bulk Editing
 
@@ -26,11 +25,10 @@ With bulk editing (thanks to Matthew Gerring) you can select all the posts in a 
 
 ### Block Editor
 
-With block-editor (aka Gutenberg) support (thanks to Daniel Bachhuber) you can switch between post-types that use either the Block Editor and the Classic one, without losing any of your embedded content.
+With Block Editor support (thanks to Daniel Bachhuber) you can switch between post types that use either the Block Editor or Classic Editor without losing any of your embedded content.
 
 ## Installation
 
-### Installation
 1. In your WordPress Dashboard go to "Plugins" -> "Add Plugin".
 2. Search for "Post Type Switcher".
 3. Install the plugin by pressing the "Install" button.
@@ -39,8 +37,8 @@ With block-editor (aka Gutenberg) support (thanks to Daniel Bachhuber) you can s
 6. Change post types as needed.
 
 ### Minimum Requirements
-* WordPress version 5.0 or greater.
-* PHP version 7.0.0 or greater.
+* WordPress version 6.2 or greater.
+* PHP version 8.0 or greater.
 * MySQL version 5.7 or greater.
 
 ### Recommended Requirements
@@ -51,7 +49,7 @@ With block-editor (aka Gutenberg) support (thanks to Daniel Bachhuber) you can s
 ## Frequently Asked Questions
 
 ### Why would I need this?
-You need to selectively change a posts type from one to another.
+You need to selectively change a post's type from one to another.
 
 ### Does this ruin my taxonomy associations?
 It should not. This plugin only changes the 'post_type' property of a post.
@@ -73,6 +71,6 @@ If you're still worried, ask for help in the WordPress.org support forums.
 * Development: https://github.com/jjj/post-type-switcher/discussions
 
 ## Screenshots
-1. "Type" column in "Posts" screen.
-2. "Post Type" interface in "Quick Edit".
-3. "Post Type" interface in "Edit Post" screen.
+1. "Type" column in the Posts screen.
+2. "Post Type" interface in Quick Edit.
+3. "Post Type" chooser in the Block Editor.
