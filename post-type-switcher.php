@@ -797,7 +797,9 @@ final class Post_Type_Switcher {
 	private static function is_allowed_page() {
 		$action = '';
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This value only routes the request; the selected handler verifies its nonce.
 		if ( isset( $_REQUEST['action'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This value only routes the request; the selected handler verifies its nonce.
 			$action = sanitize_key( wp_unslash( $_REQUEST['action'] ) );
 		}
 
@@ -828,7 +830,7 @@ final class Post_Type_Switcher {
 			 * @since 1.0.0
 			 * @param array Array of page file names
 			 */
-			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Retain the public hook name for backward compatibility.
+			// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Retain the public hook name for backward compatibility.
 			$pages = apply_filters(
 				'pts_allowed_pages',
 				array(
@@ -837,6 +839,7 @@ final class Post_Type_Switcher {
 					'admin-ajax.php' // Block Editor
 				)
 			);
+			// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 			// Only show switcher when editing
 			return (bool) in_array( $GLOBALS['pagenow'], $pages, true );
