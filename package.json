@@ -23,6 +23,6 @@
   },
   "packageManager": "npm@11.20.0",
   "devDependencies": {
-    "@wordpress/scripts": "^30.19.0"
+    "@wordpress/scripts": "^36.1.0"
   }
 }
