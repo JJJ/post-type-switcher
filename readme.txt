@@ -9,7 +9,7 @@ Contributors:      johnjamesjacoby, beatpanda, norcross
 Tags:              post, page, type, types, post type
 Requires PHP:      8.0
 Requires at least: 6.2
-Tested up to:      6.9
+Tested up to:      7.1
 Stable tag:        4.0.1
 
 A simple way to change a post's type in WordPress

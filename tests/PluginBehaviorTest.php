@@ -35,6 +35,9 @@ final class PluginBehaviorTest extends TestCase {
 		};
 
 		$method = new ReflectionMethod( Post_Type_Switcher::class, 'get_post_types' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$method->setAccessible( true );
+		}
 		$types = $method->invoke( $GLOBALS['pts_test_plugin'] );
 
 		$this->assertArrayNotHasKey( 'attachment', $types );
