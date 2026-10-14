@@ -637,7 +637,7 @@ final class Post_Type_Switcher {
 			", $post_id ) );
 
 			// Update translation grouping element types
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- WPML provides no public API for these translation relationships.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- WPML provides no public API for these translation relationships.
 			$wpdb->update(
 				$wpdb->prefix . 'icl_translations',
 				array( 'element_type' => 'post_' . $post_type ),
@@ -795,6 +795,11 @@ final class Post_Type_Switcher {
 	 * @return bool True if it should load, false if not
 	 */
 	private static function is_allowed_page() {
+		$action = '';
+
+		if ( isset( $_REQUEST['action'] ) ) {
+			$action = sanitize_key( wp_unslash( $_REQUEST['action'] ) );
+		}
 
 		if (
 			// Only for admin area
@@ -808,10 +813,10 @@ final class Post_Type_Switcher {
 				wp_doing_ajax()
 				&&
 				(
-					! empty( $_REQUEST['action'] )
+					! empty( $action )
 					&&
 					(
-						in_array( $_REQUEST['action'], array( 'inline-save', 'post_type_switcher' ), true )
+						in_array( $action, array( 'inline-save', 'post_type_switcher' ), true )
 					)
 				)
 			)
@@ -823,11 +828,15 @@ final class Post_Type_Switcher {
 			 * @since 1.0.0
 			 * @param array Array of page file names
 			 */
-			$pages = apply_filters( 'pts_allowed_pages', array(
-				'post.php',
-				'edit.php',
-				'admin-ajax.php' // Block Editor
-			) );
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Retain the public hook name for backward compatibility.
+			$pages = apply_filters(
+				'pts_allowed_pages',
+				array(
+					'post.php',
+					'edit.php',
+					'admin-ajax.php' // Block Editor
+				)
+			);
 
 			// Only show switcher when editing
 			return (bool) in_array( $GLOBALS['pagenow'], $pages, true );
@@ -915,6 +924,7 @@ final class Post_Type_Switcher {
 		 * @param  string $output The type of output that $types is
 		 * @return array
 		 */
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Retain the public hook name for backward compatibility.
 		return (array) apply_filters( 'pts_get_post_types_filter', $types, $output );
 	}
 
@@ -942,6 +952,7 @@ final class Post_Type_Switcher {
 		 * @param  array $args Array of arguments
 		 * @return array
 		 */
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Retain the public hook name for backward compatibility.
 		return (array) apply_filters( 'pts_post_type_filter', $args );
 	}
 
