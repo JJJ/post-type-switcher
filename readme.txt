@@ -8,7 +8,7 @@ License:           GPLv2 or later
 Contributors:      johnjamesjacoby, beatpanda, norcross
 Tags:              post, page, type, types, post type
 Requires PHP:      8.0
-Requires at least: 6.2
+Requires at least: 6.6
 Tested up to:      7.1
 Stable tag:        4.0.1
 
@@ -49,7 +49,7 @@ With Block Editor support (thanks to Daniel Bachhuber) you can switch between po
 6. Change post types as needed.
 
 = Minimum Requirements =
-* WordPress version 6.2 or greater.
+* WordPress version 6.6 or greater.
 * PHP version 8.0 or greater.
 * MySQL version 5.7 or greater.
 

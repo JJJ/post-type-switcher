@@ -2,7 +2,7 @@
 
 ## Compatibility
 
-- Preserve PHP 8.0 and WordPress 6.2 compatibility unless a dedicated pull
+- Preserve PHP 8.0 and WordPress 6.6 compatibility unless a dedicated pull
   request explicitly changes the published minimums.
 - Preserve the classic editor, block editor, Quick Edit, Bulk Edit, and WPML
   integration behavior.
