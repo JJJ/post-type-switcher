@@ -1,0 +1,28 @@
+* text=auto eol=lf
+
+/.gitattributes export-ignore
+/.github export-ignore
+/.gitignore export-ignore
+/AGENTS.md export-ignore
+/CHANGELOG.md export-ignore
+/CONTRIBUTING.md export-ignore
+/README.md export-ignore
+/SECURITY.md export-ignore
+/SUPPORT.md export-ignore
+/bin export-ignore
+/composer.json export-ignore
+/composer.lock export-ignore
+/docs export-ignore
+/package.json export-ignore
+/package-lock.json export-ignore
+/pnpm-lock.yaml export-ignore
+/phpcs-baseline.json export-ignore
+/phpstan-baseline.neon export-ignore
+/phpstan.neon.dist export-ignore
+/phpstan-wordpress-compat.stub export-ignore
+/phpunit.xml.dist export-ignore
+/src export-ignore
+/tests export-ignore
+
+/assets/js/*.js text eol=lf
+/assets/js/*.php text eol=lf

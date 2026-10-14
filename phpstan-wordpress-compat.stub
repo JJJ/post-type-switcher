@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * WordPress accepts numeric versions and serializes them in asset URLs.
+ *
+ * @param string $handle
+ * @param string $src
+ * @param string[] $deps
+ * @param int|string|bool|null $ver
+ * @param array<string, mixed>|bool $args
+ * @return void
+ */
+function wp_enqueue_script( $handle, $src = '', $deps = array(), $ver = false, $args = array() ) {}

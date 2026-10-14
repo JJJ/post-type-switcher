@@ -4,17 +4,24 @@
   "description": "The simplest way to change a post's type in WordPress",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jjj/post-type-switcher.git"
+    "url": "git+https://github.com/JJJ/post-type-switcher.git"
   },
   "scripts": {
     "start": "wp-scripts start",
-    "build": "wp-scripts build && node ./src/move-build.js"
+    "build": "wp-scripts build && node bin/move-build.mjs",
+    "build:check": "npm run build && npm run generated:check && git diff --exit-code -- assets/js/block.js assets/js/block.asset.php",
+    "generated:check": "node bin/check-generated-assets.mjs"
   },
-  "license": "GPL-2.0+",
+  "license": "GPL-2.0-or-later",
   "bugs": {
-    "url": "https://github.com/jjj/post-type-switcher/issues"
+    "url": "https://github.com/JJJ/post-type-switcher/issues"
   },
-  "homepage": "https://github.com/jjj/post-type-switcher#readme",
+  "homepage": "https://github.com/JJJ/post-type-switcher#readme",
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0"
+  },
+  "packageManager": "npm@11.20.0",
   "devDependencies": {
     "@wordpress/scripts": "^30.19.0"
   }

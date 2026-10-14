@@ -8,8 +8,8 @@ License:           GPLv2 or later
 Contributors:      johnjamesjacoby, beatpanda, norcross
 Tags:              post, page, type, types, post type
 Requires PHP:      8.0
-Requires at least: 6.2
-Tested up to:      6.9
+Requires at least: 6.6
+Tested up to:      7.1
 Stable tag:        4.0.1
 
 A simple way to change a post's type in WordPress
@@ -49,7 +49,7 @@ With Block Editor support (thanks to Daniel Bachhuber) you can switch between po
 6. Change post types as needed.
 
 = Minimum Requirements =
-* WordPress version 6.2 or greater.
+* WordPress version 6.6 or greater.
 * PHP version 8.0 or greater.
 * MySQL version 5.7 or greater.
 
@@ -77,6 +77,14 @@ Plugin conflicts are not unheard of and can be difficult to troubleshoot.
 If you're worried, backup your database and deactivate all other plugins before using this tool.
 
 If you're still worried, ask for help in the WordPress.org support forums.
+
+= Where can I get support? =
+
+Use the [WordPress.org support forum](https://wordpress.org/support/plugin/post-type-switcher/) for installation and usage questions.
+
+= Where can I discuss development? =
+
+Use [GitHub Discussions](https://github.com/JJJ/post-type-switcher/discussions) for broader development conversations. Report reproducible defects through GitHub Issues.
 
 == Screenshots ==
 1. "Type" column in the Posts screen.

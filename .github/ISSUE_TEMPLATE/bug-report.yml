@@ -1,0 +1,60 @@
+name: Bug report
+description: Report a reproducible problem in Post Type Switcher.
+title: "Bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: Report security vulnerabilities privately through GitHub Security Advisories.
+  - type: textarea
+    id: behavior
+    attributes:
+      label: What happened?
+      description: Describe the observed behavior and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Provide the smallest reliable sequence that demonstrates the problem.
+    validations:
+      required: true
+  - type: dropdown
+    id: editor
+    attributes:
+      label: Affected interface
+      options:
+        - Classic Editor
+        - Block Editor
+        - Quick Edit
+        - Bulk Edit
+        - WPML integration
+        - Multiple interfaces
+        - Unsure
+    validations:
+      required: true
+  - type: input
+    id: plugin-version
+    attributes:
+      label: Post Type Switcher version
+    validations:
+      required: true
+  - type: input
+    id: wordpress-version
+    attributes:
+      label: WordPress version
+    validations:
+      required: true
+  - type: input
+    id: php-version
+    attributes:
+      label: PHP version
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Include relevant post types, roles, capabilities, active plugins, and sanitized logs. Never include credentials or personal data.
