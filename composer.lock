@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "817b68056f7f538b633ed32eea7a1df2",
+    "content-hash": "eefc57f6fa3d4bc7878601f274edf29e",
     "packages": [
         {
             "name": "composer/installers",
@@ -226,16 +226,16 @@
         },
         {
             "name": "johnbillion/wp-compat",
-            "version": "2.0.1",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/johnbillion/wp-compat.git",
-                "reference": "b2e32bd91716a98bc6fc527c525b979652a4a567"
+                "reference": "3936fc9b292f501c6b014d33b904a3ed869ffafb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/johnbillion/wp-compat/zipball/b2e32bd91716a98bc6fc527c525b979652a4a567",
-                "reference": "b2e32bd91716a98bc6fc527c525b979652a4a567",
+                "url": "https://api.github.com/repos/johnbillion/wp-compat/zipball/3936fc9b292f501c6b014d33b904a3ed869ffafb",
+                "reference": "3936fc9b292f501c6b014d33b904a3ed869ffafb",
                 "shasum": ""
             },
             "require": {
@@ -297,7 +297,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-29T17:12:02+00:00"
+            "time": "2026-10-09T11:29:14+00:00"
         },
         {
             "name": "myclabs/deep-copy",
