@@ -91,6 +91,12 @@ final class PluginBehaviorTest extends TestCase {
 			array( array( 'page', 'post', 42 ) ),
 			$GLOBALS['pts_test']['calls']['do_action:post_type_after_switch']
 		);
+		$this->assertSame( array( array( 'valid' ) ), $GLOBALS['pts_test']['calls']['wp_unslash'] );
+		$this->assertSame( array( array( 'valid' ) ), $GLOBALS['pts_test']['calls']['sanitize_text_field'] );
+		$this->assertSame(
+			array( array( 'valid', 'post-type-selector' ) ),
+			$GLOBALS['pts_test']['calls']['wp_verify_nonce']
+		);
 	}
 
 	public function test_bulk_selector_retains_no_change_and_capability_filtering(): void {

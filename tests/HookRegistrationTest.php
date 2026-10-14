@@ -20,10 +20,7 @@ final class HookRegistrationTest extends TestCase {
 			array( 'admin_init', array( $GLOBALS['pts_test_plugin'], 'admin_done' ), 10, 1 ),
 			$GLOBALS['pts_test']['actions']
 		);
-		$this->assertSame(
-			array( array( 'post-type-switcher' ) ),
-			$GLOBALS['pts_test']['calls']['load_plugin_textdomain']
-		);
+		$this->assertArrayNotHasKey( 'load_plugin_textdomain', $GLOBALS['pts_test']['calls'] );
 	}
 
 	public function test_admin_init_preserves_switching_and_compatibility_hooks(): void {

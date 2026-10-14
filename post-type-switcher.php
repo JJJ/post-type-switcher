@@ -16,7 +16,6 @@
  * License:           GNU General Public License v2 or later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       post-type-switcher
- * Domain Path:       /assets/lang/
  * Requires at least: 6.6
  * Requires PHP:      8.0
  * Tested up to:      7.1
@@ -57,9 +56,6 @@ final class Post_Type_Switcher {
 	 * @since 4.0.0
 	 */
 	public function init() {
-
-		// Load the plugin textdomain
-		load_plugin_textdomain( 'post-type-switcher' );
 
 		// Initialize admin
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
@@ -399,7 +395,8 @@ final class Post_Type_Switcher {
 			'pts_blockeditor',
 			plugin_dir_url( __FILE__ ) . 'assets/js/block.js',
 			$asset['dependencies'],
-			$asset['version']
+			$asset['version'],
+			false
 		);
 
 		// Localize the block editor script variables
@@ -472,11 +469,12 @@ final class Post_Type_Switcher {
 		// Post type information
 		$post_id          = absint( $_GET['post_id'] );
 		$post_type        = sanitize_key( $_GET['pts_post_type'] );
+		$nonce            = sanitize_text_field( wp_unslash( $_GET['pts-nonce-select'] ) );
 		$post_type_object = get_post_type_object( $post_type );
 
 		// Bail if nonce is invalid, or user cannot edit or publish
 		if (
-			! wp_verify_nonce( $_GET['pts-nonce-select'], 'post-type-selector' )
+			! wp_verify_nonce( $nonce, 'post-type-selector' )
 			||
 			! current_user_can( 'edit_post', $post_id )
 			||
@@ -544,6 +542,7 @@ final class Post_Type_Switcher {
 		// Post type information
 		$post_id          = absint( $postarr['post_ID'] );
 		$post_type        = sanitize_key( $_REQUEST['pts_post_type'] );
+		$nonce            = sanitize_text_field( wp_unslash( $_REQUEST['pts-nonce-select'] ) );
 		$post_type_object = get_post_type_object( $post_type );
 
 		// Bail if empty post type
@@ -574,7 +573,7 @@ final class Post_Type_Switcher {
 		}
 
 		// Bail if nonce is invalid
-		if ( ! wp_verify_nonce( $_REQUEST['pts-nonce-select'], 'post-type-selector' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'post-type-selector' ) ) {
 			return $data;
 		}
 
@@ -630,6 +629,7 @@ final class Post_Type_Switcher {
 
 			// Retrieve the translation grouping ID
 			// Used to select and update sibling translations
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- WPML provides no public API for these translation relationships.
 			$trid = $wpdb->get_var( $wpdb->prepare( "
 				SELECT 	trid
 				FROM 	{$wpdb->prefix}icl_translations
@@ -637,6 +637,7 @@ final class Post_Type_Switcher {
 			", $post_id ) );
 
 			// Update translation grouping element types
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- WPML provides no public API for these translation relationships.
 			$wpdb->update(
 				$wpdb->prefix . 'icl_translations',
 				array( 'element_type' => 'post_' . $post_type ),
@@ -644,6 +645,7 @@ final class Post_Type_Switcher {
 			);
 
 			// Retrieve other posts that are sibling translations
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- WPML provides no public API for these translation relationships.
 			$translation_items = $wpdb->get_col( $wpdb->prepare( "
 				SELECT 	element_id
 				FROM 	{$wpdb->prefix}icl_translations
@@ -793,6 +795,13 @@ final class Post_Type_Switcher {
 	 * @return bool True if it should load, false if not
 	 */
 	private static function is_allowed_page() {
+		$action = '';
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This value only routes the request; the selected handler verifies its nonce.
+		if ( isset( $_REQUEST['action'] ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- This value only routes the request; the selected handler verifies its nonce.
+			$action = sanitize_key( wp_unslash( $_REQUEST['action'] ) );
+		}
 
 		if (
 			// Only for admin area
@@ -806,10 +815,10 @@ final class Post_Type_Switcher {
 				wp_doing_ajax()
 				&&
 				(
-					! empty( $_REQUEST['action'] )
+					! empty( $action )
 					&&
 					(
-						in_array( $_REQUEST['action'], array( 'inline-save', 'post_type_switcher' ), true )
+						in_array( $action, array( 'inline-save', 'post_type_switcher' ), true )
 					)
 				)
 			)
@@ -821,11 +830,16 @@ final class Post_Type_Switcher {
 			 * @since 1.0.0
 			 * @param array Array of page file names
 			 */
-			$pages = apply_filters( 'pts_allowed_pages', array(
-				'post.php',
-				'edit.php',
-				'admin-ajax.php' // Block Editor
-			) );
+			// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Retain the public hook name for backward compatibility.
+			$pages = apply_filters(
+				'pts_allowed_pages',
+				array(
+					'post.php',
+					'edit.php',
+					'admin-ajax.php' // Block Editor
+				)
+			);
+			// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 			// Only show switcher when editing
 			return (bool) in_array( $GLOBALS['pagenow'], $pages, true );
@@ -913,6 +927,7 @@ final class Post_Type_Switcher {
 		 * @param  string $output The type of output that $types is
 		 * @return array
 		 */
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Retain the public hook name for backward compatibility.
 		return (array) apply_filters( 'pts_get_post_types_filter', $types, $output );
 	}
 
@@ -940,6 +955,7 @@ final class Post_Type_Switcher {
 		 * @param  array $args Array of arguments
 		 * @return array
 		 */
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Retain the public hook name for backward compatibility.
 		return (array) apply_filters( 'pts_post_type_filter', $args );
 	}
 

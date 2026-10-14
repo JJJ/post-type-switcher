@@ -107,6 +107,24 @@ function sanitize_key( $value ) {
 	return strtolower( preg_replace( '/[^a-z0-9_-]/i', '', (string) $value ) );
 }
 
+/**
+ * Remove slashes from test input.
+ *
+ * @param mixed $value Input value.
+ */
+function wp_unslash( $value ) {
+	return pts_test_call( __FUNCTION__, array( $value ), stripslashes( (string) $value ) );
+}
+
+/**
+ * Sanitize a test text field.
+ *
+ * @param mixed $value Input value.
+ */
+function sanitize_text_field( $value ) {
+	return pts_test_call( __FUNCTION__, array( $value ), trim( (string) $value ) );
+}
+
 function absint( $value ) {
 	return abs( (int) $value );
 }
