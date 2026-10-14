@@ -17,7 +17,7 @@
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       post-type-switcher
  * Domain Path:       /assets/lang/
- * Requires at least: 6.2
+ * Requires at least: 6.6
  * Requires PHP:      8.0
  * Tested up to:      7.1
  * Version:           4.0.1
@@ -391,12 +391,15 @@ final class Post_Type_Switcher {
 			admin_url( 'admin-ajax.php' )
 		);
 
+		// Load the dependencies and version generated with the block editor asset.
+		$asset = require plugin_dir_path( __FILE__ ) . 'assets/js/block.asset.php';
+
 		// Enqueue the block editor script
 		wp_enqueue_script(
 			'pts_blockeditor',
 			plugin_dir_url( __FILE__ ) . 'assets/js/block.js',
-			array( 'wp-components', 'wp-edit-post', 'wp-element', 'wp-i18n', 'wp-plugins' ),
-			$this->asset_version
+			$asset['dependencies'],
+			$asset['version']
 		);
 
 		// Localize the block editor script variables

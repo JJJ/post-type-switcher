@@ -12,7 +12,7 @@ criteria in a GitHub issue. Report suspected vulnerabilities privately through
 
 - Keep each pull request focused and reversible.
 - Add regression coverage for behavior changes and bug fixes.
-- Preserve PHP 8.0 and WordPress 6.2 compatibility.
+- Preserve PHP 8.0 and WordPress 6.6 compatibility.
 - Check the classic editor, block editor, Quick Edit, and Bulk Edit paths when
   changing user-visible behavior.
 - Identify capability, nonce, dependency, generated-asset, automation, and
