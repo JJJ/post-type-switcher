@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { lstatSync } from 'node:fs';
+import { lstatSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
@@ -28,6 +28,14 @@ for (const asset of assets) {
 		console.error(`${asset} must be a regular tracked file.`);
 		process.exit(1);
 	}
+}
+
+const phpAsset = readFileSync(resolve(repositoryRoot, 'assets/js/block.asset.php'), 'utf8');
+const compactPhpAssetPattern = /^<\?php return array\('dependencies' => array\((?:'[a-z0-9-]+'(?:, '[a-z0-9-]+')*)?\), 'version' => '[a-f0-9]+'\);\n$/u;
+
+if (!compactPhpAssetPattern.test(phpAsset)) {
+	console.error('The generated PHP asset metadata must use the deterministic compact format.');
+	process.exit(1);
 }
 
 console.log('Generated block-editor assets remain tracked.');
