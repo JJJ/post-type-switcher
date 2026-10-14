@@ -19,7 +19,7 @@
  * Domain Path:       /assets/lang/
  * Requires at least: 6.2
  * Requires PHP:      8.0
- * Tested up to:      6.9
+ * Tested up to:      7.1
  * Version:           4.0.1
  */
 
@@ -422,10 +422,6 @@ final class Post_Type_Switcher {
 		// Get post type specific data
 		$post_types = $this->get_post_types();
 		$post_type  = get_post_type();
-		$selected   = '';
-
-		// Start an output buffer
-		ob_start();
 
 		// Output
 		?><select name="pts_post_type" id="pts_post_type"><?php
@@ -443,20 +439,12 @@ final class Post_Type_Switcher {
 					continue;
 				endif;
 
-				// Only select if not bulk
-				if ( false === $bulk ) :
-					$selected = selected( $post_type, $_post_type, false );
-				endif;
-
 				// Output option
-				?><option value="<?php echo esc_attr( $pt->name ); ?>" <?php echo $selected; // Do not escape ?>><?php echo esc_html( $pt->labels->singular_name ); ?></option><?php
+				?><option value="<?php echo esc_attr( $pt->name ); ?>" <?php selected( false === $bulk ? $post_type : '', $_post_type ); ?>><?php echo esc_html( $pt->labels->singular_name ); ?></option><?php
 
 			endforeach;
 
 		?></select><?php
-
-		// Output the current buffer
-		echo ob_get_clean();
 	}
 
 	/**
