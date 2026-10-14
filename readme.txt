@@ -78,6 +78,14 @@ If you're worried, backup your database and deactivate all other plugins before 
 
 If you're still worried, ask for help in the WordPress.org support forums.
 
+= Where can I get support? =
+
+Use the [WordPress.org support forum](https://wordpress.org/support/plugin/post-type-switcher/) for installation and usage questions.
+
+= Where can I discuss development? =
+
+Use [GitHub Discussions](https://github.com/JJJ/post-type-switcher/discussions) for broader development conversations. Report reproducible defects through GitHub Issues.
+
 == Screenshots ==
 1. "Type" column in the Posts screen.
 2. "Post Type" interface in Quick Edit.

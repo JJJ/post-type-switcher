@@ -1,0 +1,36 @@
+{
+  "name": "jjj/post-type-switcher",
+  "description": "The simplest way to change a post's type in WordPress",
+  "homepage": "https://github.com/JJJ/post-type-switcher",
+  "type": "wordpress-plugin",
+  "require": {
+    "php": ">=8.0",
+    "composer/installers": "^1.12 || ^2.0"
+  },
+  "require-dev": {
+    "johnbillion/wp-compat": "^2.0.1",
+    "php-stubs/wordpress-stubs": "6.9.*",
+    "phpstan/phpstan": "^2.2.13",
+    "phpunit/phpunit": "^9.6"
+  },
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "John James Jacoby",
+      "email": "johnjamesjacoby@me.com"
+    }
+  ],
+  "scripts": {
+    "phpstan": "phpstan analyse --no-progress --memory-limit=1G",
+    "test": "phpunit"
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true
+    },
+    "platform": {
+      "php": "8.0.0"
+    },
+    "sort-packages": true
+  }
+}

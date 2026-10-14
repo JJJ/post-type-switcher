@@ -1,0 +1,199 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to function is_array\(\) with non\-empty\-array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 2
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:add_column\(\) has parameter \$columns with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:add_column\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:admin_done\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:block_editor_assets\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:default_hidden_columns\(\) has parameter \$hidden with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:default_hidden_columns\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:filter_plugin_action_links\(\) has parameter \$actions with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:filter_plugin_action_links\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:get_post_type_args\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:get_post_types\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:handle_ajax\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:init\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:manage_column\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:metabox\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:override_type\(\) has parameter \$data with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:override_type\(\) has parameter \$postarr with no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:override_type\(\) return type has no value type specified in iterable type array\.$#'
+			identifier: missingType.iterableValue
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:quick_edit\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:quick_edit_bulk\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:quick_edit_script\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:quick_edit_script\(\) has parameter \$hook with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:select_box\(\) has no return type specified\.$#'
+			identifier: missingType.return
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:select_box\(\) has parameter \$bulk with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:set_post_type\(\) should return int but returns int\|false\.$#'
+			identifier: return.type
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:wpml_sync_type\(\) has parameter \$original_post_type with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:wpml_sync_type\(\) has parameter \$post_id with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Method Post_Type_Switcher\:\:wpml_sync_type\(\) has parameter \$post_type with no type specified\.$#'
+			identifier: missingType.parameter
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^PHPDoc tag @param has invalid value \(array Array of page file names\)\: Unexpected token "Array", expected variable at offset 85 on line 5$#'
+			identifier: phpDoc.parseError
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Parameter \#1 \$post_type of function get_post_type_object expects string, string\|false given\.$#'
+			identifier: argument.type
+			count: 3
+			path: post-type-switcher.php
+
+		-
+			message: '#^Parameter \#2 \$output of function get_post_types expects ''names''\|''objects'', string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Parameter \#2 \$post_type of function set_post_type expects ''page''\|''post'', string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: post-type-switcher.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: post-type-switcher.php

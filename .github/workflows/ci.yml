@@ -1,0 +1,18 @@
+# Managed by stuttter/.github fleet standards. Do not edit locally.
+name: Plugin CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "master"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    uses: stuttter/.github/.github/workflows/wordpress-plugin-ci.yml@a99d8555e5b457ea0a14a03dc659e40185829b45
+    with:
+      php-versions: '["8.0","8.2","8.4"]'
+      quality-php-version: '8.4'
