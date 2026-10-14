@@ -60,6 +60,17 @@ final class PluginBehaviorTest extends TestCase {
 
 		$this->assertSame( $data, $GLOBALS['pts_test_plugin']->override_type( $data, $post ) );
 		$this->assertArrayNotHasKey( 'do_action:post_type_after_switch', $GLOBALS['pts_test']['calls'] );
+
+		pts_test_reset();
+		$GLOBALS['pts_test']['callbacks']['get_post_type_object'] = static function () {
+			return new WP_Post_Type( 'page', 'Page', 'publish_pages' );
+		};
+		$GLOBALS['pts_test']['callbacks']['current_user_can'] = static function ( $capability ) {
+			return 'edit_post' !== $capability;
+		};
+
+		$this->assertSame( $data, $GLOBALS['pts_test_plugin']->override_type( $data, $post ) );
+		$this->assertArrayNotHasKey( 'do_action:post_type_after_switch', $GLOBALS['pts_test']['calls'] );
 	}
 
 	public function test_override_type_changes_only_the_requested_post_and_fires_the_public_action(): void {
