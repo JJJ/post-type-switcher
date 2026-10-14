@@ -9,7 +9,7 @@
   },
   "require-dev": {
     "johnbillion/wp-compat": "^2.0.1",
-    "php-stubs/wordpress-stubs": "6.9.*",
+    "php-stubs/wordpress-stubs": "7.1.*",
     "phpstan/phpstan": "^2.2.13",
     "phpunit/phpunit": "^9.6"
   },
