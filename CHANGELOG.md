@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.1.0
+* Require WordPress 6.6 and test through WordPress 7.1
+* Load Block Editor assets from their generated dependency metadata
+* Normalize request data before nonce and AJAX routing checks
+* Rely on WordPress core for plugin translation loading
+* Add maintained compatibility, quality, and release automation
+
 ## 4.0.1
 * Prevent Authors & Contributors from changing types on posts of Editors & Admins
 
