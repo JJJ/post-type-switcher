@@ -1,12 +1,10 @@
-/* global wp */
-
 /**
  * WordPress dependencies.
  */
-const { Button, Dropdown, PanelRow } = wp.components;
-const { PluginPostStatusInfo } = wp.editor;
-const { Component } = wp.element;
-const { sprintf, __ } = wp.i18n;
+import { Button, Dropdown } from '@wordpress/components';
+import { PluginPostStatusInfo } from '@wordpress/editor';
+import { Component } from '@wordpress/element';
+import { sprintf, __ } from '@wordpress/i18n';
 
 /**
  * The PostTypeSwitcherForm component.

@@ -16,7 +16,17 @@ final class JavaScriptContractTest extends TestCase {
 		$this->assertStringContainsString( 'window.confirm( message )', $source );
 		$this->assertStringContainsString( "'&pts_post_type=' + value", $source );
 		$this->assertStringContainsString( 'currentPostType: oldPostType', $source );
-		$this->assertContains( 'react-jsx-runtime', $asset['dependencies'] );
+		$this->assertSame(
+			array(
+				'react-jsx-runtime',
+				'wp-components',
+				'wp-editor',
+				'wp-element',
+				'wp-i18n',
+				'wp-plugins',
+			),
+			$asset['dependencies']
+		);
 		$this->assertStringContainsString( '$asset[\'dependencies\']', $plugin );
 		$this->assertStringContainsString( '$asset[\'version\']', $plugin );
 	}

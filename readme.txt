@@ -10,7 +10,7 @@ Tags:              post, page, type, types, post type
 Requires PHP:      8.0
 Requires at least: 6.6
 Tested up to:      7.1
-Stable tag:        4.1.0
+Stable tag:        4.1.1
 
 A simple way to change a post's type in WordPress
 
@@ -92,6 +92,9 @@ Use [GitHub Discussions](https://github.com/JJJ/post-type-switcher/discussions) 
 3. "Post Type" chooser in the Block Editor.
 
 == Changelog ==
+
+= 4.1.1 =
+* Restore the Block Editor interface by declaring all required WordPress script dependencies
 
 = 4.1.0 =
 * Require WordPress 6.6 and test through WordPress 7.1

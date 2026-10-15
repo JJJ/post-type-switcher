@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## 4.1.1
+* Restore the Block Editor interface by declaring all required WordPress script dependencies
+
 ## 4.1.0
 * Require WordPress 6.6 and test through WordPress 7.1
 * Load Block Editor assets from their generated dependency metadata
