@@ -87,10 +87,6 @@ function get_post_type_object( $post_type ) {
 	return pts_test_call( __FUNCTION__, array( $post_type ), new WP_Post_Type( (string) $post_type ) );
 }
 
-function get_post_field( ...$arguments ) {
-	return pts_test_call( __FUNCTION__, $arguments, '' );
-}
-
 function current_user_can( ...$arguments ) {
 	return pts_test_call( __FUNCTION__, $arguments, true );
 }
@@ -157,11 +153,6 @@ function selected( $selected, $current, $display = true ) {
 	return $result;
 }
 
-function wp_nonce_field( ...$arguments ) {
-	pts_test_call( __FUNCTION__, $arguments );
-	echo '<input type="hidden" name="pts-nonce-select" value="valid" />';
-}
-
 function get_post_meta( ...$arguments ) {
 	return pts_test_call( __FUNCTION__, $arguments, '' );
 }
@@ -180,10 +171,6 @@ function delete_post_meta( ...$arguments ) {
 
 function set_post_type( ...$arguments ) {
 	return pts_test_call( __FUNCTION__, $arguments, 1 );
-}
-
-function wp_update_post( ...$arguments ) {
-	return pts_test_call( __FUNCTION__, $arguments, $arguments[0]['ID'] ?? 0 );
 }
 
 pts_test_reset();

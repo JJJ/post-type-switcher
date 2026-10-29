@@ -40,14 +40,6 @@ final class HookRegistrationTest extends TestCase {
 			$GLOBALS['pts_test']['actions']
 		);
 		$this->assertContains(
-			array( 'attachment_submitbox_misc_actions', array( $GLOBALS['pts_test_plugin'], 'metabox' ), 10, 1 ),
-			$GLOBALS['pts_test']['actions']
-		);
-		$this->assertContains(
-			array( 'wp_insert_attachment_data', array( $GLOBALS['pts_test_plugin'], 'override_type' ), 10, 2 ),
-			$GLOBALS['pts_test']['filters']
-		);
-		$this->assertContains(
 			array( 'wp_insert_post_data', array( $GLOBALS['pts_test_plugin'], 'override_type' ), 10, 2 ),
 			$GLOBALS['pts_test']['filters']
 		);
