@@ -26,7 +26,7 @@ permissions:
 
 jobs:
   release:
-    uses: stuttter/.github/.github/workflows/wordpress-plugin-release.yml@b36bbd399090bcf18898a1b34b74f780faf40ffc
+    uses: stuttter/.github/.github/workflows/wordpress-plugin-release.yml@fc0a20716fd0698003851a78be1a3c9022572fc1
     permissions:
       contents: write
     secrets:
