@@ -14,8 +14,9 @@ The plugin can convert nearly every combination of posts, pages, and even custom
 * Post to Page
 * Post to Custom
 * Custom to Custom
+* Media to Post, Page, or Custom
 
-As of 3.0.0, support for switching to or from attachments was removed. This may come back in a subsequent version.
+Attachments can be switched to another supported post type from the extended Edit Media screen. A converted attachment with WordPress's normal `inherit` status becomes a draft so it remains available in the target post type. Attachment is not available as a target because ordinary posts do not have the file, MIME type, and metadata that WordPress expects from media items.
 
 Invisible post types, such as revisions and menus, are purposely excluded. If you need to access invisible post types, you can adjust the boundaries using the `pts_post_type_filter` filter.
 
@@ -52,7 +53,7 @@ With Block Editor support (thanks to Daniel Bachhuber) you can switch between po
 You need to selectively change a post's type from one to another.
 
 ### Does this ruin my taxonomy associations?
-It should not. This plugin only changes the 'post_type' property of a post.
+It should not. This plugin preserves taxonomy associations while changing a post's type. When an attachment uses WordPress's internal `inherit` status, converting it to another type also changes its status to `draft` so the converted item remains editable.
 
 ### Does this ruin block-editor content?
 It should not. Be careful when editing HTML content while switching between editor types!

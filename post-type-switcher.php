@@ -100,9 +100,10 @@ final class Post_Type_Switcher {
 		// Default to "post_type" column being hidden
 		add_filter( 'default_hidden_columns', array( $this, 'default_hidden_columns' ) );
 
-		// Add UI to "Publish" metabox
+		// Add UI to post and attachment submit boxes
 		add_action( 'admin_head',                  array( $this, 'admin_head'        ) );
 		add_action( 'post_submitbox_misc_actions', array( $this, 'metabox'           ) );
+		add_action( 'attachment_submitbox_misc_actions', array( $this, 'metabox' ) );
 		add_action( 'quick_edit_custom_box',       array( $this, 'quick_edit'        ) );
 		add_action( 'bulk_edit_custom_box',        array( $this, 'quick_edit_bulk'   ) );
 		add_action( 'admin_enqueue_scripts',       array( $this, 'quick_edit_script' ) );
@@ -507,7 +508,7 @@ final class Post_Type_Switcher {
 	}
 
 	/**
-	 * Override post_type in wp_insert_post()
+	 * Override post data in wp_insert_post()
 	 *
 	 * We do a bunch of sanity checks here, to make sure we're only changing the
 	 * post type when the user explicitly intends to.
@@ -519,6 +520,7 @@ final class Post_Type_Switcher {
 	 * - Check if revision or current post-type
 	 * - Check new post-type exists
 	 * - Check that user can publish posts of new type
+	 * - Normalize the status of converted attachments
 	 *
 	 * @since 2.0.0
 	 *
@@ -590,6 +592,11 @@ final class Post_Type_Switcher {
 		// Bail if it's a revision
 		if ( in_array( $postarr['post_type'], array( $post_type, 'revision' ), true ) ) {
 			return $data;
+		}
+
+		// Normalize the status before updating the post type
+		if ( isset( $data['post_status'] ) ) {
+			$data['post_status'] = $this->get_updated_post_status( $data['post_status'], $postarr['post_type'], $post_type );
 		}
 
 		// Update post type
@@ -863,8 +870,9 @@ final class Post_Type_Switcher {
 	 */
 	private function set_post_type( $post_id = 0, $post_type = '' ) {
 
-		// Get the current/previous post_type
-		$current  = get_post_type( $post_id );
+		// Get the current post type and raw status
+		$current        = get_post_type( $post_id );
+		$current_status = get_post_field( 'post_status', $post_id, 'raw' );
 
 		// Try to get original & previous
 		$original = get_post_meta( $post_id, 'pts_original_type', true );
@@ -874,7 +882,18 @@ final class Post_Type_Switcher {
 		$retval   = set_post_type( $post_id, $post_type );
 
 		// Maybe stash the current/previous in meta
-		if ( ! empty( $retval ) ) {
+		if ( ! empty( $retval ) && false !== $current ) {
+			$updated_status = $this->get_updated_post_status( $current_status, $current, $post_type );
+
+			// Keep converted attachments visible in the target post type
+			if ( $updated_status !== $current_status ) {
+				wp_update_post(
+					array(
+						'ID'          => $post_id,
+						'post_status' => $updated_status,
+					)
+				);
+			}
 
 			// Only add the original type once
 			if ( empty( $original ) ) {
@@ -900,6 +919,25 @@ final class Post_Type_Switcher {
 	}
 
 	/**
+	 * Return the status to use after switching a post type.
+	 *
+	 * @param string $post_status      Current post status.
+	 * @param string $post_type        Current post type.
+	 * @param string $updated_post_type New post type.
+	 *
+	 * @return string Updated post status.
+	 */
+	private function get_updated_post_status( $post_status, $post_type, $updated_post_type ) {
+
+		// Attachment inheritance is not valid for ordinary post types
+		if ( 'attachment' === $post_type && 'attachment' !== $updated_post_type && 'inherit' === $post_status ) {
+			return 'draft';
+		}
+
+		return $post_status;
+	}
+
+	/**
 	 * Get switchable post type objects, based on post-type arguments.
 	 *
 	 * @since 3.2.0
@@ -913,7 +951,7 @@ final class Post_Type_Switcher {
 		// Get switchable types
 		$types = get_post_types( $this->get_post_type_args(), $output );
 
-		// Unset attachment types, since support seems to be broken
+		// Keep attachments source-only because ordinary posts lack media invariants
 		if ( isset( $types['attachment'] ) ) {
 			unset( $types['attachment'] );
 		}
