@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
+require_once __DIR__ . '/class-sitepress.php';
 require_once __DIR__ . '/attachment-source-stubs.php';
 
 /**
@@ -21,6 +22,8 @@ final class AttachmentSourceTest extends TestCase {
 	protected function setUp(): void {
 		pts_test_reset();
 		$_REQUEST = array();
+		$_GET     = array();
+		unset( $GLOBALS['sitepress'], $GLOBALS['wpdb'] );
 	}
 
 	/**
@@ -181,17 +184,184 @@ final class AttachmentSourceTest extends TestCase {
 		$result = $method->invoke( $GLOBALS['pts_test_plugin'], 84, 'page' );
 
 		$this->assertSame( 1, $result );
-		$this->assertSame( array( array( 84, 'page' ) ), $GLOBALS['pts_test']['calls']['set_post_type'] );
+		$this->assertArrayNotHasKey( 'set_post_type', $GLOBALS['pts_test']['calls'] );
 		$this->assertSame(
 			array(
 				array(
 					array(
 						'ID'          => 84,
+						'post_type'   => 'page',
 						'post_status' => 'draft',
 					),
 				),
 			),
 			$GLOBALS['pts_test']['calls']['wp_update_post']
+		);
+	}
+
+	/**
+	 * Verify a failed normalized update does not commit type or switch metadata.
+	 */
+	public function test_direct_switch_does_not_commit_attachment_type_or_metadata_when_normalized_update_fails(): void {
+		$GLOBALS['pts_test']['callbacks']['get_post_type'] = static function () {
+			return 'attachment';
+		};
+
+		$GLOBALS['pts_test']['callbacks']['get_post_field'] = static function () {
+			return 'inherit';
+		};
+
+		$GLOBALS['pts_test']['callbacks']['wp_update_post'] = static function () {
+			return 0;
+		};
+
+		$method = new ReflectionMethod( Post_Type_Switcher::class, 'set_post_type' );
+		if ( PHP_VERSION_ID < 80100 ) {
+			$method->setAccessible( true );
+		}
+		$result = $method->invoke( $GLOBALS['pts_test_plugin'], 84, 'page' );
+
+		$this->assertSame( 0, $result );
+		$this->assertArrayNotHasKey( 'set_post_type', $GLOBALS['pts_test']['calls'] );
+		$this->assertArrayNotHasKey( 'add_post_meta', $GLOBALS['pts_test']['calls'] );
+		$this->assertArrayNotHasKey( 'update_post_meta', $GLOBALS['pts_test']['calls'] );
+		$this->assertArrayNotHasKey( 'delete_post_meta', $GLOBALS['pts_test']['calls'] );
+		$this->assertSame(
+			array(
+				array(
+					array(
+						'ID'          => 84,
+						'post_type'   => 'page',
+						'post_status' => 'draft',
+					),
+				),
+			),
+			$GLOBALS['pts_test']['calls']['wp_update_post']
+		);
+	}
+
+	/**
+	 * Verify AJAX failures do not announce a completed switch.
+	 */
+	public function test_ajax_switch_does_not_fire_success_action_when_normalized_update_fails(): void {
+		$_GET = array(
+			'post_id'          => 84,
+			'pts_post_type'    => 'page',
+			'pts-nonce-select' => 'valid',
+		);
+
+		$GLOBALS['pts_test']['callbacks']['get_post_type'] = static function () {
+			return 'attachment';
+		};
+
+		$GLOBALS['pts_test']['callbacks']['get_post_field'] = static function () {
+			return 'inherit';
+		};
+
+		$GLOBALS['pts_test']['callbacks']['wp_update_post'] = static function () {
+			return 0;
+		};
+
+		$GLOBALS['pts_test']['callbacks']['wp_safe_redirect'] = static function () {
+			throw new RuntimeException( 'redirected' );
+		};
+
+		try {
+			$GLOBALS['pts_test_plugin']->handle_ajax();
+			$this->fail( 'Expected the redirect fixture to stop execution.' );
+		} catch ( RuntimeException $exception ) {
+			$this->assertSame( 'redirected', $exception->getMessage() );
+		}
+
+		$this->assertArrayNotHasKey( 'do_action:post_type_after_switch', $GLOBALS['pts_test']['calls'] );
+	}
+
+	/**
+	 * Verify WPML leaves a failed sibling unchanged while the outer save proceeds.
+	 */
+	public function test_wpml_sync_does_not_record_target_type_for_a_failed_sibling_conversion(): void {
+		$GLOBALS['sitepress'] = new SitePress();
+		$GLOBALS['wpdb']      = new class() {
+			/**
+			 * Database table prefix.
+			 *
+			 * @var string
+			 */
+			public $prefix = 'wp_';
+
+			/**
+			 * Recorded database updates.
+			 *
+			 * @var array<int, array<int, mixed>>
+			 */
+			public $updates = array();
+
+			/**
+			 * Return the supplied query fixture.
+			 *
+			 * @param string $query Query text.
+			 * @return string Query text.
+			 */
+			public function prepare( $query ) {
+				return $query;
+			}
+
+			/**
+			 * Return the translation group fixture.
+			 *
+			 * @return int Translation group ID.
+			 */
+			public function get_var() {
+				return 7;
+			}
+
+			/**
+			 * Return translated post fixtures.
+			 *
+			 * @return array<int, string> Translated post IDs.
+			 */
+			public function get_col() {
+				return array( '84', '85' );
+			}
+
+			/**
+			 * Record a translation-table update.
+			 *
+			 * @param mixed ...$arguments Update arguments.
+			 * @return int Updated row count.
+			 */
+			public function update( ...$arguments ) {
+				$this->updates[] = $arguments;
+				return 1;
+			}
+		};
+
+		$GLOBALS['pts_test']['callbacks']['get_post_type'] = static function () {
+			return 'attachment';
+		};
+
+		$GLOBALS['pts_test']['callbacks']['get_post_field'] = static function () {
+			return 'inherit';
+		};
+
+		$GLOBALS['pts_test']['callbacks']['wp_update_post'] = static function () {
+			return 0;
+		};
+
+		$GLOBALS['pts_test_plugin']->wpml_sync_type( 'page', 'attachment', 84 );
+
+		$this->assertSame(
+			array(
+				array(
+					'wp_icl_translations',
+					array( 'element_type' => 'post_page' ),
+					array(
+						'trid'       => 7,
+						'element_id' => 84,
+					),
+				),
+			),
+			$GLOBALS['wpdb']->updates
 		);
 	}
 }
