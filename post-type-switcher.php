@@ -488,7 +488,7 @@ final class Post_Type_Switcher {
 		$original_post_type = get_post_type( $post_id );
 
 		// Update the post type
-		$this->set_post_type( $post_id, $post_type );
+		$updated = $this->set_post_type( $post_id, $post_type );
 
 		/**
 		 * Allow actions after post type switch
@@ -499,7 +499,9 @@ final class Post_Type_Switcher {
 		 * @param $post_type The old post type
 		 * @param $post_id The post ID
 		 */
-		do_action( 'post_type_after_switch', $post_type, $original_post_type, $post_id );
+		if ( ! empty( $updated ) ) {
+			do_action( 'post_type_after_switch', $post_type, $original_post_type, $post_id );
+		}
 
 		// Redirect
 		wp_safe_redirect( get_edit_post_link( $post_id, 'raw' ) );
@@ -642,14 +644,6 @@ final class Post_Type_Switcher {
 				WHERE 	element_id = %d
 			", $post_id ) );
 
-			// Update translation grouping element types
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- WPML provides no public API for these translation relationships.
-			$wpdb->update(
-				$wpdb->prefix . 'icl_translations',
-				array( 'element_type' => 'post_' . $post_type ),
-				array( 'trid'		  => $trid )
-			);
-
 			// Retrieve other posts that are sibling translations
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- WPML provides no public API for these translation relationships.
 			$translation_items = $wpdb->get_col( $wpdb->prepare( "
@@ -663,9 +657,29 @@ final class Post_Type_Switcher {
 				return;
 			}
 
-			// Update post type of sibling translations
+			// Update sibling post types and their translation records together.
 			foreach ( $translation_items as $_post_id ) {
-				$this->set_post_type( $_post_id, $post_type );
+				$_post_id = absint( $_post_id );
+				$is_primary_post = ( absint( $post_id ) === $_post_id );
+				$current_post_type = get_post_type( $_post_id );
+				$updated = ( $post_type === $current_post_type )
+					? 1
+					: $this->set_post_type( $_post_id, $post_type );
+
+				// The primary post is already committed by AJAX or pending in the outer form save.
+				if ( empty( $updated ) && ! $is_primary_post ) {
+					continue;
+				}
+
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- WPML provides no public API for these translation relationships.
+				$wpdb->update(
+					$wpdb->prefix . 'icl_translations',
+					array( 'element_type' => 'post_' . $post_type ),
+					array(
+						'trid'       => $trid,
+						'element_id' => $_post_id,
+					)
+				);
 			}
 		}
 	}
@@ -877,23 +891,26 @@ final class Post_Type_Switcher {
 		$original = get_post_meta( $post_id, 'pts_original_type', true );
 		$previous = get_post_meta( $post_id, 'pts_previous_type', true );
 
-		// Try to set the post type
-		$retval   = set_post_type( $post_id, $post_type );
+		// Normalize status before changing type so both fields persist together.
+		$updated_status = ( false !== $current )
+			? $this->get_updated_post_status( $current_status, $current, $post_type )
+			: $current_status;
+
+		if ( $updated_status !== $current_status ) {
+			$updated_post = wp_update_post(
+				array(
+					'ID'          => $post_id,
+					'post_type'   => $post_type,
+					'post_status' => $updated_status,
+				)
+			);
+			$retval       = empty( $updated_post ) ? 0 : 1;
+		} else {
+			$retval = set_post_type( $post_id, $post_type );
+		}
 
 		// Maybe stash the current/previous in meta
 		if ( ! empty( $retval ) && false !== $current ) {
-			$updated_status = $this->get_updated_post_status( $current_status, $current, $post_type );
-
-			// Keep converted attachments visible in the target post type
-			if ( $updated_status !== $current_status ) {
-				wp_update_post(
-					array(
-						'ID'          => $post_id,
-						'post_status' => $updated_status,
-					)
-				);
-			}
-
 			// Only add the original type once
 			if ( empty( $original ) ) {
 				add_post_meta( $post_id, 'pts_original_type', $current );
