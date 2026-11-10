@@ -56,11 +56,3 @@ function get_edit_post_link( ...$arguments ) {
 function wp_safe_redirect( ...$arguments ) {
 	return pts_test_call( __FUNCTION__, $arguments, true );
 }
-
-if ( ! class_exists( 'SitePress' ) ) {
-	/**
-	 * Minimal WPML fixture.
-	 */
-	class SitePress {
-	}
-}

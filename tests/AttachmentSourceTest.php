@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 use PHPUnit\Framework\TestCase;
 
+require_once __DIR__ . '/class-sitepress.php';
 require_once __DIR__ . '/attachment-source-stubs.php';
 
 /**
@@ -281,24 +282,54 @@ final class AttachmentSourceTest extends TestCase {
 	public function test_wpml_sync_does_not_record_target_type_for_a_failed_sibling_conversion(): void {
 		$GLOBALS['sitepress'] = new SitePress();
 		$GLOBALS['wpdb']      = new class() {
-			/** @var string */
+			/**
+			 * Database table prefix.
+			 *
+			 * @var string
+			 */
 			public $prefix = 'wp_';
 
-			/** @var array<int, array<int, mixed>> */
+			/**
+			 * Recorded database updates.
+			 *
+			 * @var array<int, array<int, mixed>>
+			 */
 			public $updates = array();
 
+			/**
+			 * Return the supplied query fixture.
+			 *
+			 * @param string $query Query text.
+			 * @return string Query text.
+			 */
 			public function prepare( $query ) {
 				return $query;
 			}
 
+			/**
+			 * Return the translation group fixture.
+			 *
+			 * @return int Translation group ID.
+			 */
 			public function get_var() {
 				return 7;
 			}
 
+			/**
+			 * Return translated post fixtures.
+			 *
+			 * @return array<int, string> Translated post IDs.
+			 */
 			public function get_col() {
 				return array( '84', '85' );
 			}
 
+			/**
+			 * Record a translation-table update.
+			 *
+			 * @param mixed ...$arguments Update arguments.
+			 * @return int Updated row count.
+			 */
 			public function update( ...$arguments ) {
 				$this->updates[] = $arguments;
 				return 1;

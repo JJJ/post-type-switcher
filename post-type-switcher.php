@@ -659,10 +659,10 @@ final class Post_Type_Switcher {
 
 			// Update sibling post types and their translation records together.
 			foreach ( $translation_items as $_post_id ) {
-				$_post_id = absint( $_post_id );
-				$is_primary_post = ( absint( $post_id ) === $_post_id );
+				$_post_id          = absint( $_post_id );
+				$is_primary_post   = ( absint( $post_id ) === $_post_id );
 				$current_post_type = get_post_type( $_post_id );
-				$updated = ( $post_type === $current_post_type )
+				$updated           = ( $post_type === $current_post_type )
 					? 1
 					: $this->set_post_type( $_post_id, $post_type );
 
