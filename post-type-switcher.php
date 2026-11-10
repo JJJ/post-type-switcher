@@ -18,7 +18,6 @@
  * Text Domain:       post-type-switcher
  * Requires at least: 6.6
  * Requires PHP:      8.0
- * Tested up to:      7.1
  * Version:           4.1.1
  */
 
